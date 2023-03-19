@@ -1,0 +1,22 @@
+---
+updated: 2023-03-19
+title: Cannot read properties of null error (hooks/contexts)
+---
+
+> I get this error:
+>
+> ```
+> Cannot read properties of null (reading 'useSomething')
+> ```
+>
+> Why is that?
+
+A likely cause is that you're using a hook/context in a server component in the app router. They can
+only be used inside client components. See
+<Question id="when-is-a-component-a-client-component-in-the-app-router" /> for when a component is
+considered a client component. Most likely, you'll need to add a `"use client"` directive somewhere.
+
+If you didn't use the hook yourself, that means a third-party library you used uses the hook but
+didn't mark it as a client component. Refer to
+[Third party packages](https://beta.nextjs.org/docs/rendering/server-and-client-components#third-party-packages)
+for how to fix this.

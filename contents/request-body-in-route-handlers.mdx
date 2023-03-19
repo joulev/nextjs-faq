@@ -1,0 +1,18 @@
+---
+updated: 2023-03-19
+title: Request body in route handlers
+---
+
+> I tried to use `req.body` in route handlers but it's not returning the object I sent in the
+> request. What's wrong?
+
+Route handlers follow completely different syntax compared to the `pages/api` directory. You use
+`req.json()` instead, just like how you `res.json()` after `fetch()`ing a URL.
+
+```ts
+export async function POST(request: Request) {
+  const body = await request.json();
+  console.log(body);
+  return new Response("OK");
+}
+```

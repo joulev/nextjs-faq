@@ -1,0 +1,31 @@
+---
+updated: 2023-03-19
+title: Add headers and status to response in route handlers
+---
+
+> How do I set a custom response status code or headers in a route handler?
+
+With `Response`:
+
+```ts
+return new Response("Hello world", {
+  status: 200,
+  headers: {
+    "Content-Type": "text/plain",
+  },
+});
+```
+
+With `NextResponse.json`:
+
+```ts
+return NextResponse.json(
+  { message: "Hello world" },
+  {
+    status: 200,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }
+);
+```

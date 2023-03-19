@@ -1,0 +1,15 @@
+---
+updated: 2023-03-19
+title: When is a component a client component, in the app router?
+---
+
+> When is a component a client component, in the app router?
+
+- When it is explicitly marked as a client component, using the `"use client"` directive, or
+- When it is imported to a client component.
+
+In all other cases, the component is a server component.
+
+Do note that when a component X is imported to a client component Y, X is rendered as a client
+component for that case only, and is still a server component by default elsewhere, unless you
+explicitly used the `"use client"` directive.

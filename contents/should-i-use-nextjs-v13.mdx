@@ -1,0 +1,25 @@
+---
+updated: 2023-03-19
+title: Should I use Next.js v13?
+---
+
+> Should I migrate my app to Next.js v13, or should I keep using v12 until v13 is stable?
+
+Version 13 _is_ stable. You can still use the `pages` directory in Next.js v13 normally. The new app
+router is not stable, but it is not required; you don't have to use it in v13.
+
+Please upgrade to Next.js v13, as it's generally a bad idea to keep using outdated software. You
+also won't receive as much help in the Discord server if you keep using version 12. Refer to
+[the migration guide](https://nextjs.org/docs/upgrading#upgrading-from-12-to-13) on more info on how
+to upgrade.
+
+For whether or not you should use the new app router, refer to
+<Question id="should-i-use-the-app-router" />.
+
+The only major case where you should not use Next.js v13 is if you must use React v17 or lower,
+since Next.js v13 requires React v18. In this case I recommend the following:
+
+- Migrate your app to React v18 as soon as possible, and upgrade to Next.js v13 right after that
+
+- If you can't use React v18 because of a dependency, make a feature request to the said dependency
+  asking them to upgrade to React v18, or find an alternative.

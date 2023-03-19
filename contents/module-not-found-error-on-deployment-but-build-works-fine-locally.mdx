@@ -1,0 +1,25 @@
+---
+updated: 2023-03-19
+title: '"Module not found" error on deployment but build works fine locally'
+---
+
+> When I deploy my Next.js project to Vercel or many other providers, I get the following error:
+>
+> ```
+> Module not found: Can't resolve 'some module' in 'some path'
+> ```
+>
+> But `npm run build` works fine on my computer. What's wrong?
+
+The most likely cause is that you're using a case-insensitive operating system (Windows, macOS) and
+you have a file named, say, `SomeFile.js` and you're trying to import it as `somefile.js`. This will
+work on your computer but not on Vercel or other providers, because they use Linux, which is
+case-sensitive.
+
+If you host your project on GitHub or similar Git hosting services, go there to check the correct
+capitalisation of the file path, and use it. You may also want to look up how to rename the file
+with `git` so that your prefered capitalisation is preserved.
+
+_Personal opinion:_ This is why I exclusively use `kebab-case` for file and folder names now. It is
+probably not a popular opinion in the React community, but it's exactly because I faced this kind of
+problem before and want to avoid it in the future.
