@@ -33,7 +33,7 @@ export default async function Content({ id }: { id: string }) {
       <hr />
       <div className="text-sm text-slate-600 dark:text-slate-400">
         <p>
-          This website is a colletion of my (<A href="https://github.com/joulev">@joulev</A>)
+          This website is a collection of my (<A href="https://github.com/joulev">@joulev</A>)
           answers to some of the most commonly asked questions on the{" "}
           <A href="https://discord.gg/nextjs">official Next.js server</A>. I found myself answering
           these questions over and over again so I decided why not make something so I can simply
