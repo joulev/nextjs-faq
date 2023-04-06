@@ -1,12 +1,44 @@
-import Content from "~/app/[id]/content";
+import { ArrowLeft } from "lucide-react";
+import Balancer from "react-wrap-balancer";
+import { A } from "~/app/[id]/components";
 import { getAllIds, getTitle } from "~/app/[id]/get-content";
+import { getContent } from "~/app/[id]/get-content";
+import ShareButton from "~/app/[id]/share-button";
 
-export default function Page({ params }: { params: { id: string } }) {
+function formatDate(date: Date) {
+  const formatter = new Intl.DateTimeFormat("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+  return formatter.format(date); // 1 January 2021
+}
+
+export default async function Page({ params }: { params: { id: string } }) {
+  const { content, title, updated } = await getContent(params.id);
   return (
-    <div className="px-8 py-16">
-      {/* @ts-expect-error */}
-      <Content id={params.id} />
-    </div>
+    <>
+      <div className="not-prose">
+        <A
+          href="/"
+          className="text-daw-slate-600 text-sm inline-flex flex-row gap-2 justify-center items-center"
+        >
+          <ArrowLeft size="18" /> Back to question list
+        </A>
+      </div>
+      <h1 className="my-8">
+        <Balancer>{title}</Balancer>
+      </h1>
+      <div className="flex flex-row justify-between items-center not-prose text-sm text-daw-slate-600">
+        <div>
+          <span className="hidden sm:inline">Last updated:</span>{" "}
+          <time title={updated.toISOString()}>{formatDate(updated)}</time>
+        </div>
+        <ShareButton />
+      </div>
+      <hr />
+      {content}
+    </>
   );
 }
 
