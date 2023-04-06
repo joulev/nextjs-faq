@@ -1,5 +1,6 @@
 import { A } from "~/app/[id]/components";
 import "./globals.css";
+import "./prism-theme.css";
 
 const REPO = "https://github.com/joulev/nextjs-discord-common-questions";
 

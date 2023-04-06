@@ -1,5 +1,9 @@
 import Link from "next/link";
 import { HelpCircle } from "lucide-react";
+import { highlight, languages } from "prismjs";
+import "prismjs/components/prism-json";
+import "prismjs/components/prism-jsx";
+import "prismjs/components/prism-typescript";
 import { getTitle } from "~/app/[id]/get-content";
 
 export function A({ href, ...rest }: React.ComponentProps<"a">) {
@@ -7,6 +11,13 @@ export function A({ href, ...rest }: React.ComponentProps<"a">) {
   return <a {...rest} href={href} target="_blank" rel="noopener noreferrer" />;
 }
 export const a = A;
+
+export function code({ children, ...rest }: React.ComponentProps<"code">) {
+  const language = rest.className?.replace(/language-/, "");
+  if (!language || !children) return <code {...rest}>{children}</code>;
+  const rendered = highlight(String(children), languages[language], language);
+  return <code {...rest} dangerouslySetInnerHTML={{ __html: rendered }} />;
+}
 
 async function __Question({ id }: { id: string }) {
   const title = await getTitle(id);
