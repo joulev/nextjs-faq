@@ -3,7 +3,9 @@ import { getAllIds, getTitle } from "~/app/[id]/get-content";
 
 export default async function Page() {
   const ids = getAllIds();
-  const entries = await Promise.all(ids.map(async id => ({ id, title: await getTitle(id) })));
+  const entries = await Promise.all(ids.map(async id => ({ id, title: await getTitle(id) }))).then(
+    entries => entries.sort((a, b) => a.title.localeCompare(b.title))
+  );
   return (
     <>
       <h1>Question list</h1>

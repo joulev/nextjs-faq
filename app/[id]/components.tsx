@@ -4,6 +4,7 @@ import { highlight, languages } from "prismjs";
 import "prismjs/components/prism-json";
 import "prismjs/components/prism-jsx";
 import "prismjs/components/prism-typescript";
+import "prismjs/components/prism-tsx";
 import { getTitle } from "~/app/[id]/get-content";
 
 export function A({ href, ...rest }: React.ComponentProps<"a">) {
