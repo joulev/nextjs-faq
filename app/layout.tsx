@@ -28,6 +28,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <A href={`${REPO}/issues`}>open an issue</A> or{" "}
                 <A href={`${REPO}/pulls`}>make a pull request</A>.
               </p>
+              <p>
+                <A href={REPO}>The content and all source code of this app</A> are placed under{" "}
+                <A href="http://wiki.creativecommons.org/CC0">CC0</A>. Attribution, though not
+                required, is appreciated.
+              </p>
             </div>
           </div>
         </div>
