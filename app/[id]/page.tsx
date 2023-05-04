@@ -1,18 +1,9 @@
 import { ArrowLeft } from "lucide-react";
 import Balancer from "react-wrap-balancer";
+import { getAllIds, getTitle, getContent } from "~/app/get-content";
+import formatDate from "~/app/format-date";
 import { A } from "~/app/[id]/components";
-import { getAllIds, getTitle } from "~/app/[id]/get-content";
-import { getContent } from "~/app/[id]/get-content";
 import ShareButton from "~/app/[id]/share-button";
-
-function formatDate(date: Date) {
-  const formatter = new Intl.DateTimeFormat("en-GB", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-  return formatter.format(date); // 1 January 2021
-}
 
 export default async function Page({ params }: { params: { id: string } }) {
   const { content, title, updated } = await getContent(params.id);

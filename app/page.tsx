@@ -1,25 +1,34 @@
+import { Fragment } from "react";
+import { getAllIds, getContent } from "~/app/get-content";
+import formatDate from "~/app/format-date";
 import { A } from "~/app/[id]/components";
-import { getAllIds, getTitle } from "~/app/[id]/get-content";
+
+async function getData(id: string) {
+  const { title, updated } = await getContent(id);
+  return { id, title, updated };
+}
 
 export default async function Page() {
   const ids = getAllIds();
-  const entries = await Promise.all(ids.map(async id => ({ id, title: await getTitle(id) }))).then(
-    entries => entries.sort((a, b) => a.title.localeCompare(b.title))
+  const entries = await Promise.all(ids.map(getData)).then(entries =>
+    entries.sort((a, b) => a.title.localeCompare(b.title))
   );
   return (
     <>
       <h1>Question list</h1>
-      <div className="flex flex-col gap-4 not-prose text-lg">
-        {entries.map(({ id, title }) => (
-          <A
-            key={id}
-            href={`/${id}`}
-            className="bg-daw-slate-100 px-6 py-4 rounded hover:bg-daw-slate-200 hover:text-daw-slate-950 transition"
-          >
-            {title}
-          </A>
-        ))}
-      </div>
+      {entries.map(({ id, title, updated }) => (
+        <Fragment key={id}>
+          <hr />
+          <div className="not-prose -my-4">
+            <A href={`/${id}`} className="flex flex-col gap-2">
+              <h3 className="text-lg font-medium">{title}</h3>
+              <div className="text-sm text-daw-slate-600">
+                <time title={updated.toISOString()}>{formatDate(updated)}</time>
+              </div>
+            </A>
+          </div>
+        </Fragment>
+      ))}
     </>
   );
 }

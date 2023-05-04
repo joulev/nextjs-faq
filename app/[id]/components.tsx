@@ -5,7 +5,7 @@ import "prismjs/components/prism-json";
 import "prismjs/components/prism-jsx";
 import "prismjs/components/prism-typescript";
 import "prismjs/components/prism-tsx";
-import { getTitle } from "~/app/[id]/get-content";
+import { getTitle } from "~/app/get-content";
 
 export function A({ href, ...rest }: React.ComponentProps<"a">) {
   if (href && href.startsWith("/")) return <Link {...rest} href={href} ref={undefined} />;
