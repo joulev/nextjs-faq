@@ -1,11 +1,11 @@
 ---
-updated: 2023-04-07
+updated: 2023-05-05
 title: Fetching own API endpoint in React Server Components
 ---
 
 > As part of data-fetching, I'm fetching the data from my own API routes or
-> [route handlers](https://beta.nextjs.org/docs/routing/route-handlers) with a `fetch` inside a
-> server component like so:
+> [route handlers](https://nextjs.org/docs/app/building-your-application/routing/router-handlers)
+> with a `fetch` inside a server component like so:
 >
 > ```tsx
 > export default async function Page() {
@@ -34,8 +34,8 @@ export default async function Page() {
 ```
 
 If you worry about authentication or similar stuff,
-[`cookies`](https://beta.nextjs.org/docs/api-reference/cookies) and
-[`headers`](https://beta.nextjs.org/docs/api-reference/headers) are helpful.
+[`cookies`](https://nextjs.org/docs/app/api-reference/functions/cookies) and
+[`headers`](https://nextjs.org/docs/app/api-reference/functions/headers) are helpful.
 
 Route handlers should be instead used for client-side fetching, interactions with other
 services/applications, etc. If you find yourself repeating code in both the server component and the
@@ -74,8 +74,8 @@ approach above, it would just be them importing static JS objects, which doesn't
 educational value in terms of demonstrating how the `app` router works. That's why they have to use
 `fetch`. This is just a special case.
 
-And if you notice very carefully, they are actually fetching the current deployment during build, not
-the new server with newly updated route handler code. It counts as a separate backend service,
+And if you notice very carefully, they are actually fetching the current deployment during build,
+not the new server with newly updated route handler code. It counts as a separate backend service,
 that's why it works.
 
 ## What are the drawbacks of the approach?
