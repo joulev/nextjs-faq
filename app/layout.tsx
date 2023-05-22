@@ -7,12 +7,12 @@ const REPO = "https://github.com/joulev/nextjs-discord-common-questions";
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="text-daw-slate-950 bg-daw-slate-50">
+      <body className="text-daw-zinc-950 bg-daw-zinc-50">
         <div className="px-8 py-16">
-          <div className="prose prose-slate dark:prose-invert mx-auto">
+          <div className="prose prose-zinc dark:prose-invert mx-auto">
             {children}
             <hr />
-            <div className="text-sm text-daw-slate-600">
+            <div className="text-sm text-daw-zinc-600">
               <p>
                 This website is a collection of my (<A href="https://github.com/joulev">@joulev</A>)
                 answers to some of the most commonly asked questions on the{" "}

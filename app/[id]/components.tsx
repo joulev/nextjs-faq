@@ -30,7 +30,7 @@ async function __Question({ id }: { id: string }) {
     <>
       &nbsp;
       <span className="whitespace-nowrap">
-        <HelpCircle size="18" className="inline-block text-daw-slate-600 mr-1" />
+        <HelpCircle size="18" className="inline-block text-daw-zinc-600 mr-1" />
         &nbsp;
       </span>
       <A href={`/${id}`}>{title}</A>

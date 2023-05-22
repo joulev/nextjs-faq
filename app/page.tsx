@@ -22,7 +22,7 @@ export default async function Page() {
           <div className="not-prose -my-4">
             <A href={`/${id}`} className="flex flex-col gap-2">
               <h3 className="text-lg font-medium">{title}</h3>
-              <div className="text-sm text-daw-slate-600">
+              <div className="text-sm text-daw-zinc-600">
                 <time title={updated.toISOString()}>{formatDate(updated)}</time>
               </div>
             </A>

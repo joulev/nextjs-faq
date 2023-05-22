@@ -12,7 +12,7 @@ export default async function Page({ params }: { params: { id: string } }) {
       <div className="not-prose">
         <A
           href="/"
-          className="text-daw-slate-600 text-sm inline-flex flex-row gap-2 justify-center items-center"
+          className="text-daw-zinc-600 text-sm inline-flex flex-row gap-2 justify-center items-center"
         >
           <ArrowLeft size="18" /> Back to question list
         </A>
@@ -20,7 +20,7 @@ export default async function Page({ params }: { params: { id: string } }) {
       <h1 className="my-8">
         <Balancer>{title}</Balancer>
       </h1>
-      <div className="flex flex-row justify-between items-center not-prose text-sm text-daw-slate-600">
+      <div className="flex flex-row justify-between items-center not-prose text-sm text-daw-zinc-600">
         <div>
           <span className="hidden sm:inline">Last updated:</span>{" "}
           <time title={updated.toISOString()}>{formatDate(updated)}</time>
