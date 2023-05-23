@@ -1,6 +1,7 @@
 import { A } from "~/app/[id]/components";
 import "./globals.css";
 import "./prism-theme.css";
+import { Metadata } from "next";
 
 const REPO = "https://github.com/joulev/nextjs-discord-common-questions";
 
@@ -40,3 +41,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   );
 }
+
+const title = "Answers to Next.js Discord common questions";
+const description =
+  "@joulev's answers to some of the most commonly asked questions on the official Next.js server";
+const url = "https://nextjs-discord-common-questions.joulev.dev";
+export const metadata: Metadata = {
+  metadataBase: new URL(url),
+  title,
+  description,
+  robots: { index: true, follow: true },
+  alternates: { canonical: url },
+  icons: {
+    icon: [
+      { url: "https://static.joulev.dev/images/favicon.svg", type: "image/svg+xml" },
+      { url: "https://static.joulev.dev/favicon.ico", type: "image/x-icon", sizes: "any" },
+    ],
+    apple: [{ url: "https://static.joulev.dev/images/apple-touch-icon.png", sizes: "180x180" }],
+  },
+};

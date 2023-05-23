@@ -19,8 +19,8 @@ export default async function Page() {
       {entries.map(({ id, title, updated }) => (
         <Fragment key={id}>
           <hr />
-          <div className="not-prose -my-4">
-            <A href={`/${id}`} className="flex flex-col gap-2">
+          <div className="not-prose -my-12">
+            <A href={`/${id}`} className="flex flex-col gap-2 py-8">
               <h3 className="text-lg font-medium">{title}</h3>
               <div className="text-sm text-daw-zinc-600">
                 <time title={updated.toISOString()}>{formatDate(updated)}</time>
@@ -32,7 +32,3 @@ export default async function Page() {
     </>
   );
 }
-
-export const metadata = {
-  title: "Answers to Next.js Discord common questions",
-};
