@@ -1,0 +1,44 @@
+---
+updated: 2023-05-23
+title: Fetching own API endpoint in getServerSideProps and similar functions
+---
+
+> As part of data-fetching, I'm fetching the data from my own API routes with a `fetch` inside
+> `getServerSideProps` like so:
+>
+> ```tsx
+> export async function getServerSideProps() {
+>   const res = await fetch("http://localhost:3000/api/user?uid=123456");
+>   const user = await res.json();
+>   return {
+>     props: { user },
+>   };
+> }
+> ```
+>
+> But I have to use an absolute URL instead of a nicer relative URL here. Why is that? Is this the
+> right way to fetch data?
+
+No, this is not the right way to fetch data in `getServerSideProps` (and similar functions such as
+`getStaticProps`). In short, do _not_ fetch your own API routes in server environments like those
+functions, instead just call the server-side logic directly. Instead of the code above, you should
+do something like this:
+
+```tsx
+import { prisma } from "~/lib/prisma";
+
+export async function getServerSideProps() {
+  const user = await prisma.user.findUnique({ where: { id: 123456 } });
+  return {
+    props: { user },
+  };
+}
+```
+
+For more information, see <Question id="fetching-own-api-endpoint-in-react-server-components" />
+which concerns the exact problem here but for the `app` router. Read it with "server components" as
+"`getServerSideProps` and similar functions" and "route handlers" as "API routes".
+
+Basically, **if you find yourself having to fetch from `localhost:3000` in your own Next.js app**
+(assuming this Next.js app runs on port 3000) **and the fetch requires an absolute URL, you are very
+likely doing something wrong**.

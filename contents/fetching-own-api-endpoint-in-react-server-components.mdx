@@ -1,5 +1,5 @@
 ---
-updated: 2023-05-05
+updated: 2023-05-23
 title: Fetching own API endpoint in React Server Components
 ---
 
@@ -32,6 +32,10 @@ export default async function Page() {
   return <div>{user?.name}</div>;
 }
 ```
+
+**If you find yourself having to fetch from `localhost:3000` in your own Next.js app** (assuming
+this Next.js app runs on port 3000) **and the fetch requires an absolute URL, you are very likely
+doing something wrong**.
 
 If you worry about authentication or similar stuff,
 [`cookies`](https://nextjs.org/docs/app/api-reference/functions/cookies) and
