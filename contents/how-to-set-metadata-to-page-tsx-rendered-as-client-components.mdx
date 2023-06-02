@@ -1,0 +1,66 @@
+---
+updated: 2023-06-02
+title: How to set metadata to page.tsx rendered as client components?
+---
+
+> [The `export const metadata` syntax](https://nextjs.org/docs/app/api-reference/functions/generate-metadata)
+> seems to not work if `page.tsx` is a client component. How do I set my page title and other
+> metadata then?
+
+The `metadata` object and `generateMetadata` function exports are only supported in server
+components. Hence, you need to make your page a server component to use them. A method to do that is
+to move all your client-side logic to a separate client component and import that client component
+to the now-server component `page.tsx`. So instead of
+
+```tsx
+// page.tsx
+"use client";
+export default function Page() {
+  useSomeHook();
+  return <Something />;
+}
+export const metadata = { title: "My Page" };
+```
+
+you need to make a new client component, say `page.client.tsx`, and import it to `page.tsx`:
+
+```tsx
+// page.client.tsx
+"use client";
+export default function PageClient() {
+  useSomeHook();
+  return <Something />;
+}
+
+// page.tsx
+import PageClient from "./page.client";
+export default function Page() {
+  return <PageClient />;
+}
+export const metadata = { title: "My Page" };
+```
+
+## How do I set dynamic metadata that depends on client-side states?
+
+_As far as I know_, there isn't an official guide for this yet, and I am looking forward to an
+official guide on this soon. If you know of the officially recommended way to do it, please
+[help me improve this page](https://github.com/joulev/nextjs-discord-common-questions/edit/main/contents/how-to-set-metadata-to-page-tsx-rendered-as-client-components.mdx).
+For now I'm using the following workaround which seems to work well, but as long as it is not
+officially endorsed by the Next.js documentation or the React.js documentation, **it is only a
+workaround for now** so use at your own risk.
+
+```tsx
+"use client";
+import { useState } from "react";
+
+export default function Page() {
+  const [title, setTitle] = useState("Hello World");
+  return (
+    <div>
+      {/* Yes, we simply put the <title> tag anywhere in the document. */}
+      <title>{title}</title>
+      <input value={title} onChange={e => setTitle(e.target.value)} />
+    </div>
+  );
+}
+```
