@@ -1,14 +1,15 @@
+import { Metadata } from "next";
 import { A } from "~/app/[id]/components";
+import { Preload } from "~/app/preload";
 import "./globals.css";
 import "./prism-theme.css";
-import { Metadata } from "next";
 
 const REPO = "https://github.com/joulev/nextjs-discord-common-questions";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="text-daw-zinc-950 bg-daw-zinc-50">
+      <body className="text-daw-zinc-950 bg-daw-zinc-50 font-sans">
         <div className="px-8 py-16">
           <div className="prose prose-zinc dark:prose-invert mx-auto">
             {children}
@@ -38,6 +39,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
         </div>
       </body>
+      <Preload />
     </html>
   );
 }

@@ -37,4 +37,4 @@ async function __Question({ id }: { id: string }) {
     </>
   );
 }
-export const Question = __Question as unknown as React.FC<{ id: string }>;
+export const Question = __Question as unknown as ({ id }: { id: string }) => JSX.Element;
