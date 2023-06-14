@@ -17,7 +17,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           <ArrowLeft size="18" /> Back to question list
         </A>
       </div>
-      <h1 className="my-8">
+      <h1 className="my-8 font-bold">
         <Balancer>{title}</Balancer>
       </h1>
       <div className="flex flex-row justify-between items-center not-prose text-sm text-daw-zinc-600">

@@ -15,7 +15,7 @@ export default async function Page() {
   );
   return (
     <>
-      <h1>Question list</h1>
+      <h1 className="font-bold">Question list</h1>
       {entries.map(({ id, title, updated }) => (
         <Fragment key={id}>
           <hr />
