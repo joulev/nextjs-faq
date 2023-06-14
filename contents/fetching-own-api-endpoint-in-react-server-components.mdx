@@ -1,5 +1,5 @@
 ---
-updated: 2023-05-23
+updated: 2023-06-14
 title: Fetching own API endpoint in React Server Components
 ---
 
@@ -88,21 +88,29 @@ The most evident drawback of the approach is that it doesn't work (see above). B
 work, or what if you only use it in the limited scenarios where it does work? What are the drawbacks
 then?
 
-- The fetch does not have access to headers and cookies automatically. You need to manually extract
-  the relevant informations with `headers` and `cookies` and pass them to the `fetch` call.
+- **The fetch does not have access to headers and cookies automatically.** You need to manually
+  extract the relevant informations with `headers` and `cookies` and pass them to the `fetch` call.
 
-- It is slower, albeit only _very very_ slightly. It is essentially your server fetching data from
-  itself, while pretending itself as a separate server. The overhead added by that pretense is small
-  but it is there.
+- **It is not type-safe.** In the examples above, if you use `fetch`, since the server component
+  knows nothing about what would be responded by the route handler, the type has to be `any` and you
+  have to manually type-check/validate the response. But if you use something like Prisma with
+  server components directly as above, the type is available automatically (so you know if something
+  can be `null` or you didn't typo `user.name` to `user.nmae`).
 
-- It is not type-safe. In the examples above, if you use `fetch`, since the server component knows
-  nothing about what would be responded by the route handler, the type has to be `any` and you have
-  to manually type-check/validate the response. But if you use something like Prisma with server
-  components directly as above, the type is available automatically (so you know if something can be
-  `null` or you didn't typo `user.name` to `user.nmae`).
+- **If you self-host, it is slower, albeit only _very very_ slightly.** It is essentially your
+  server fetching data from itself, while pretending itself as a separate server. The overhead added
+  by that pretense is small but it is there.
 
-- It brings zero benefits. Server components are run exclusively on the server anyway, you need not
-  worry about server-side logic/variables leaking to the browser.
+- **If you host the Next.js app on Vercel or a similar serverless platform, chances are it can be
+  significantly slower.** At least for Vercel's case, your route handlers and dynamic server
+  components are deployed to AWS Lambda, which can require a cold start if the lambda is not used
+  for a while. We don't know how Vercel bundles the route handlers and server components to
+  different lambdas, but if your route handler happens to need a cold start when you request the
+  server component, you are taking that cold start penalty that could've been avoided if you didn't
+  use a route handler in the first place.
+
+- **It brings zero benefits.** Server components are run exclusively on the server anyway, you need
+  not worry about server-side logic/variables leaking to the browser.
 
 - You would be shooting yourself and other future maintainers in the foot. That is generally a bad
   idea.
