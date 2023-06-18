@@ -1,0 +1,49 @@
+---
+updated: 2023-06-18
+title: How to create a minimal reproduction repository?
+---
+
+> How to create a minimal reproduction repository?
+
+1. Start from your current repository that has the issue.
+
+1. Is it hard to set up your repository? If so, you should simplify it to such a state that it is as
+   trivial as possible to set the repository up.
+
+   In the case of Next.js, it would mean I can simply `git clone` it and `pnpm install` then
+   `pnpm dev` normally and I can see the problem on the screen. Unless the problem is related to a
+   connection to the backend or a database or any environment variables, it is a bad idea to require
+   extra configurations like that in your reproduction repository.
+
+1. Gradually remove seemingly irrelevant parts from your code, in small chunks.
+
+   - Go from the most obvious ones first. If the problem is related to a form in `/contact`, you
+     probably don't need to include the code for `/about` or `/blog` in your reproduction
+     repository.
+
+   - If you are using a monorepo, please simplify it to a single package repository, unless the
+     problem is related to the monorepo structure itself.
+
+   - If the problem is related to a form and that form only, other parts of the page (header,
+     footer, etc.) are irrelevant. You can remove them.
+
+   - Is the problem related to styling? If no, you can remove all the styling code. The reproduction
+     repository shouldn't contain your custom Bootstrap theme.
+
+   - Et cetera.
+
+1. After each time you remove a chunk out of your code, try to reproduce the problem. At one point
+   it will vanish. That's when you know where the bug is hiding at. Revert the change that makes the
+   problem go away, now your repository should already be pretty minimal.
+
+1. But still, I would recommend you to make it even more minimal. Knowing where the problem hides,
+   you should remove other parts of the code where possible, again in small chunks. Of course,
+   remember to ensure the problem is still reproducible after each removal, and revert any changes
+   that make the problem go away.
+
+1. Now, if there is still business logic inside your code, you should replace it with dummy data
+   where possible.
+
+1. Upload your reproduction repository to GitHub and share it with the person who sent you the link
+   to this article. Please also share how to get the necessary environment variables and the steps
+   to set up the repository, if any.
