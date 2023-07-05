@@ -11,7 +11,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className="text-daw-zinc-950 bg-daw-zinc-50 font-sans">
         <div className="px-8 py-16">
-          <div className="prose prose-zinc dark:prose-invert mx-auto">
+          <div className="prose prose-zinc dark:prose-invert prose-headings:font-medium prose-h1:font-semibold prose-a:font-medium prose-blockquote:font-normal prose-strong:font-medium prose-code:font-semibold prose-code:prose-pre:font-normal prose-th:font-medium mx-auto">
             {children}
             <hr />
             <div className="text-sm text-daw-zinc-600">
