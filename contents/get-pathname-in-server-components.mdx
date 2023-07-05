@@ -1,21 +1,37 @@
 ---
-updated: 2023-05-05
+updated: 2023-07-05
 title: Get pathname in server components
 ---
 
 > In client components, `usePathname` is available to get the current pathname. However, in server
 > components, there is no such API. How do I get the pathname in server components?
 
-It is likely that you don't need to get the pathname, or you should use a client component instead.
+You can use [`server-only-context`](https://github.com/manvalls/server-only-context) to avoid prop
+drilling.
 
-- Because layout server components are not recomputed when you navigate in the pages under it, it is
-  impossible to determine the pathname in any layout components.
+Do note though, that it might not work like you expect it to. Specifically, if the component is used
+inside a page component, it should work, as the pathname can be reliably determined.
 
-- The pathname can be hardcoded if you need it in page components.
+However, if you use it in a layout component, the pathname cannot be reliably determined. Since a
+layout is not recomputed when you navigate to a different page, it's only possible to get the
+pathname until that layout file; the pathname from that layout file onwards cannot be determined. In
+other words, if you have something like this
 
-- If you need the pathname in a reused component, add a `pathname` prop to it and pass the hardcoded
-  value from the page components to it.
+```
+app/
+  users/
+    [userId]/
+      layout.tsx
+      [appId]/
+        page.tsx
+```
 
-If you really, _really_ want to get the pathname in any server components, you can use
-[`headers`](https://nextjs.org/docs/app/api-reference/functions/headers) and get the pathname from
-relevant HTTP headers.
+all server components inside `layout.tsx` can only get the pathname until `/users/[userId]`. It
+canot read `appId`. You need to keep this in mind.
+
+If you need to show certain elements on certain routes and not on other routes, or display certain
+element in different styling depending on the pathname, you need to use route groups or client
+components. In the above example, you can't ask `layout.tsx` to display a banner for a particular
+`appId`.
+
+See also: [vercel/next.js#43704](https://github.com/vercel/next.js/issues/43704).
