@@ -45,15 +45,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 }
 
 const title = "Answers to Next.js Discord common questions";
-const description =
-  "@joulev's answers to some of the most commonly asked questions on the official Next.js server";
-const url = "https://nextjs-discord-common-questions.joulev.dev";
 export const metadata: Metadata = {
-  metadataBase: new URL(url),
   title,
-  description,
-  robots: { index: true, follow: true },
-  alternates: { canonical: url },
   icons: {
     icon: [
       { url: "https://static.joulev.dev/images/favicon.svg", type: "image/svg+xml" },
