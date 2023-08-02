@@ -1,6 +1,9 @@
 ---
 updated: 2023-06-14
 title: Fetching own API endpoint in React Server Components
+messageContent:
+  "Don't fetch your own route handlers in server components; import your server-side logic directly
+  instead. See more info [here](<link>)"
 ---
 
 > As part of data-fetching, I'm fetching the data from my own API routes or
@@ -48,7 +51,9 @@ route handler, you can extract the common code into a separate utility function 
 
 Of course, this only applies to server components. In client components, you can fetch your own
 route handlers normally with `swr` or `react-query` (see also
-<Question id="when-is-a-component-a-client-component-in-the-app-router" />).
+
+<Question id="when-is-a-component-a-client-component-in-the-app-router" />
+).
 
 Now read on to see why `fetch`-ing route handlers in server components is a bad idea.
 

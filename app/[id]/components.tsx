@@ -13,7 +13,7 @@ export function pre({ children }: React.ComponentProps<"pre">) {
   return <>{children}</>;
 }
 
-export async function code({ children, ...rest }: React.ComponentProps<"code">) {
+async function __code({ children, ...rest }: React.ComponentProps<"code">) {
   const language = rest.className?.replace(/language-/, "");
   if (!language || !children) return <code {...rest}>{children}</code>;
   const highlighter = await getHighlighter({
@@ -28,6 +28,7 @@ export async function code({ children, ...rest }: React.ComponentProps<"code">) 
     />
   );
 }
+export const code = __code as unknown as (props: React.ComponentProps<"code">) => JSX.Element;
 
 async function __Question({ id }: { id: string }) {
   const title = await getTitle(id);

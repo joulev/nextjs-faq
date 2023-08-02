@@ -1,12 +1,12 @@
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Copy, Link } from "lucide-react";
 import Balancer from "react-wrap-balancer";
 import { getAllIds, getTitle, getContent } from "~/app/get-content";
 import formatDate from "~/app/format-date";
 import { A } from "~/app/[id]/components";
-import ShareButton from "~/app/[id]/share-button";
+import CopyButton from "~/app/[id]/copy-button";
 
 export default async function Page({ params }: { params: { id: string } }) {
-  const { content, title, updated } = await getContent(params.id);
+  const { content, title, updated, messageContent } = await getContent(params.id);
   return (
     <>
       <div className="not-prose">
@@ -20,12 +20,21 @@ export default async function Page({ params }: { params: { id: string } }) {
       <h1 className="my-8 font-bold">
         <Balancer>{title}</Balancer>
       </h1>
-      <div className="flex flex-row justify-between items-center not-prose text-sm text-daw-zinc-600">
+      <div className="flex flex-row justify-between items-center not-prose text-sm text-daw-zinc-600 gap-8 flex-wrap">
         <div>
           <span className="hidden sm:inline">Last updated:</span>{" "}
           <time title={updated.toISOString()}>{formatDate(updated)}</time>
         </div>
-        <ShareButton />
+        <div className="flex flex-row gap-8">
+          <CopyButton contentTemplate={messageContent}>
+            <Copy size="18" />
+            Copy message
+          </CopyButton>
+          <CopyButton contentTemplate="<link>">
+            <Link size="18" />
+            Copy link
+          </CopyButton>
+        </div>
       </div>
       <hr />
       {content}

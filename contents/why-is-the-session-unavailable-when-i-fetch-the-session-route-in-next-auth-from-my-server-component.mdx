@@ -3,6 +3,9 @@ updated: 2023-05-22
 title:
   Why is the session unavailable when I fetch the session route in next-auth from my server
   component?
+messageContent:
+  "Don't fetch your own route handlers, including the session endpoint, in server components. You
+  can use `getServerSession` for that. See the reason why and some code examples [here](<link>)"
 ---
 
 > I'm having this function
@@ -43,6 +46,7 @@ session retrieval function.
 
 Generally speaking, you should not fetch your own route handlers (like `/api/auth/session` in this
 case) inside your own server. For more details, see
+
 <Question id="fetching-own-api-endpoint-in-react-server-components" />. Note that this does not
 apply to _external_ server, e.g. your separate Express server. In that case, whether you should do
 this depends on many factors.

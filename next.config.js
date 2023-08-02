@@ -13,6 +13,12 @@ module.exports = {
         "https://nextjs.org/docs/app/building-your-application/routing/router-handlers#request-body",
       permanent: true,
     },
+    {
+      source: "/cannot-read-properties-of-null-error-hooks-contexts",
+      destination:
+        "https://nextjs.org/docs/getting-started/react-essentials#the-use-client-directive",
+      permanent: true,
+    },
   ],
   experimental: {
     serverComponentsExternalPackages: ["vscode-oniguruma", "shiki"],
