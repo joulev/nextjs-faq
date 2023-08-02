@@ -1,10 +1,6 @@
 import Link from "next/link";
 import { HelpCircle } from "lucide-react";
-import { highlight, languages } from "prismjs";
-import "prismjs/components/prism-json";
-import "prismjs/components/prism-jsx";
-import "prismjs/components/prism-typescript";
-import "prismjs/components/prism-tsx";
+import { getHighlighter } from "shiki";
 import { getTitle } from "~/app/get-content";
 
 export function A({ href, ...rest }: React.ComponentProps<"a">) {
@@ -13,11 +9,24 @@ export function A({ href, ...rest }: React.ComponentProps<"a">) {
 }
 export const a = A;
 
-export function code({ children, ...rest }: React.ComponentProps<"code">) {
+export function pre({ children }: React.ComponentProps<"pre">) {
+  return <>{children}</>;
+}
+
+export async function code({ children, ...rest }: React.ComponentProps<"code">) {
   const language = rest.className?.replace(/language-/, "");
   if (!language || !children) return <code {...rest}>{children}</code>;
-  const rendered = highlight(String(children), languages[language], language);
-  return <code {...rest} dangerouslySetInnerHTML={{ __html: rendered }} />;
+  const highlighter = await getHighlighter({
+    theme: "one-dark-pro",
+    langs: ["json", "json5", "js", "jsx", "ts", "tsx"],
+  });
+  return (
+    <div
+      dangerouslySetInnerHTML={{
+        __html: highlighter.codeToHtml(String(children), { lang: language }),
+      }}
+    />
+  );
 }
 
 async function __Question({ id }: { id: string }) {

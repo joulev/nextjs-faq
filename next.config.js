@@ -14,4 +14,7 @@ module.exports = {
       permanent: true,
     },
   ],
+  experimental: {
+    serverComponentsExternalPackages: ["vscode-oniguruma", "shiki"],
+  },
 };
