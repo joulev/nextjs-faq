@@ -1,34 +1,41 @@
-import { Fragment } from "react";
-import { getAllIds, getContent } from "~/app/get-content";
-import formatDate from "~/app/format-date";
-import { A } from "~/app/[id]/components";
+import { Metadata } from "next";
+import { Link, MDXContent } from "next-docs-ui/mdx";
+import { DocsPage } from "next-docs-ui/page";
 
-async function getData(id: string) {
-  const { title, updated } = await getContent(id);
-  return { id, title, updated };
-}
+const REPO = "https://github.com/joulev/nextjs-discord-common-questions";
 
-export default async function Page() {
-  const ids = getAllIds();
-  const entries = await Promise.all(ids.map(getData)).then(entries =>
-    entries.sort((a, b) => a.title.localeCompare(b.title))
-  );
+export default function Home() {
   return (
-    <>
-      <h1 className="font-bold">Question list</h1>
-      {entries.map(({ id, title, updated }) => (
-        <Fragment key={id}>
-          <hr />
-          <div className="not-prose -my-12">
-            <A href={`/${id}`} className="flex flex-col gap-2 py-8">
-              <h3 className="text-lg font-medium">{title}</h3>
-              <div className="text-sm text-daw-zinc-600">
-                <time title={updated.toISOString()}>{formatDate(updated)}</time>
-              </div>
-            </A>
-          </div>
-        </Fragment>
-      ))}
-    </>
+    <DocsPage>
+      <MDXContent>
+        <p>
+          This website is a collection of my (<Link href="https://github.com/joulev">@joulev</Link>)
+          answers to some of the most commonly asked questions on the{" "}
+          <Link href="https://discord.gg/nextjs">official Next.js server</Link>. I found myself
+          answering these questions over and over again so I decided why not make something so I can
+          simply answer with a URL instead.
+        </p>
+        <p>
+          The answers here are mine only and{" "}
+          <strong>not affiliated with Vercel or the Next.js team</strong>. Since Next.js is evolving
+          very fast, these answers might get outdated quickly. I try my best to keep them up to date
+          but that is not always possible. If you find any errors or would like to make
+          improvements, feel free to <Link href={`${REPO}/issues`}>open an issue</Link> or{" "}
+          <Link href={`${REPO}/pulls`}>make a pull request</Link>.
+        </p>
+        <p>
+          <Link href={REPO}>The content and all source code of this app</Link> are placed under{" "}
+          <Link href="http://wiki.creativecommons.org/CC0">CC0</Link>. Attribution, though not
+          required, is appreciated.
+        </p>
+        <p>
+          Built with <Link href="https://github.com/SonMooSans/next-docs">next-docs</Link>.
+        </p>
+      </MDXContent>
+    </DocsPage>
   );
 }
+
+export const metadata: Metadata = {
+  title: "Answers to Next.js Discord common questions",
+};

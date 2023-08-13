@@ -1,5 +1,11 @@
-/** @type {import("next").NextConfig} */
-module.exports = {
+/** @type {import('next').NextConfig} */
+const config = {
+  pageExtensions: ["ts", "tsx", "js", "jsx"],
+  reactStrictMode: true,
+  eslint: {
+    // Replaced by root workspace command
+    ignoreDuringBuilds: true,
+  },
   redirects: async () => [
     {
       source: "/add-headers-and-status-to-response-in-route-handlers",
@@ -20,7 +26,8 @@ module.exports = {
       permanent: true,
     },
   ],
-  experimental: {
-    serverComponentsExternalPackages: ["vscode-oniguruma", "shiki"],
-  },
 };
+
+const { withContentlayer } = require("next-contentlayer");
+
+module.exports = withContentlayer(config);
