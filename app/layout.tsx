@@ -1,11 +1,11 @@
 import { Metadata } from "next";
 import { RootProvider } from "next-docs-ui/provider";
 import { DocsLayout } from "next-docs-ui/layout";
-import { Lato } from "next/font/google";
+import { Hanken_Grotesk } from "next/font/google";
 import { tree } from "./tree";
 import "next-docs-ui/style.css";
 
-const font = Lato({ weight: ["400", "700"], subsets: ["latin"] });
+const font = Hanken_Grotesk({ subsets: ["latin"] });
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
