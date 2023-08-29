@@ -9,11 +9,14 @@ export default function Home() {
     <DocsPage>
       <MDXContent>
         <p>
-          This website is a collection of my (<Link href="https://github.com/joulev">@joulev</Link>)
-          answers to some of the most commonly asked questions on the{" "}
-          <Link href="https://discord.gg/nextjs">official Next.js server</Link>. I found myself
-          answering these questions over and over again so I decided why not make something so I can
-          simply answer with a URL instead.
+          I am <Link href="https://github.com/joulev">@joulev</Link>, a Next.js user, an active
+          helper and moderator on the{" "}
+          <Link href="https://discord.gg/nextjs">official Next.js server</Link>.
+        </p>
+        <p>
+          This website is a collection of my answers to some of the most commonly asked questions on
+          the server. I found myself answering these questions over and over again so I decided why
+          not make something so I can simply answer with a URL instead.
         </p>
         <p>
           The answers here are mine only and{" "}

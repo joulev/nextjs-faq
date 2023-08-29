@@ -1,0 +1,114 @@
+---
+updated: 2023-08-29
+title: Non-Next.js Questions
+messageContent: XXX
+---
+
+## Is there a Vercel discord server?
+
+No, and the Next.js Discord server is focused on Next.js the framework only, not on Vercel the
+hosting provider, so questions like "How do I fix this error while deploying _SvelteKit_ to Vercel?"
+are off-topic in the server. For Vercel specific questions we encourage you to seek
+[suitable Vercel support channels](https://vercel.com/help).
+
+## How do I report a message or a person in the server to the moderation team?
+
+It depends on what kind of thing you want to report.
+
+- If you want to report a message, right click the message (long tap on mobile) and select "Apps"
+  &rarr; "Report". It will log the report and the moderation team will be able to see it, and
+  non-mod members won't be able to see your report.
+
+  ![Report message](/discord-report-command.png)
+
+  Please use this option for things you would like moderators to act on only. Do not abuse this
+  option as a way to "soft-ping" to get moderators' attention on your question/query.
+
+- You can also ping moderators directly by mentioning `@Moderator` in your message. The "Report"
+  option does not ping us (at the moment), so use this ping when you need immediate help from a
+  moderator. Once again, only use the ping when you have something to report, do _not_ use it to get
+  attention to a technical question for example. You may get muted or more if you abuse this ping.
+
+- If you want to report a person, you can get moderator attention by either mentioning `@Moderator`
+  or by going to `#discord-feedback` with a message like ``I would like to report a person.'' A
+  moderator will give you further instructions.
+
+  If I (@joulev) am online, you can also send a direct message to me and ping me inside the server
+  to get my attention.
+
+## How do I format my message nicely?
+
+Most basic Markdown syntax is now supported by Discord, you should therefore use Markdown to format
+your message. [Learn Markdown](https://www.markdowntutorial.com/) if you don't know it yet.
+
+- `**bold**` **bold**
+- `_italic_` _italic_
+- `__underline__` <span style={{ textDecoration: "underline" }}>underline</span> (this is not part
+  of Markdown proper, but Discord does support it).
+- `~~strikethrough~~` ~~strikethrough~~
+- `||spoiler||` for spoiler text (this is not part of Markdown proper, but Discord does support it).
+- <code>\`inline code\`</code> for inline code
+- `# Heading 1` (and `## Heading 2`, `### Heading 3`, etc.) for headings. **Use these sparingly.**
+- `<https://example.com>` to add links. The `<` and `>` are there to disable embedding, which is
+  often disruptive in the server where lots of messages are sent.
+- `[text](<https://example.com>)` for links with custom text. It will show up like this:
+  [text](https://example.com). Once again, the `<` and `>` are there to disable embedding.
+- `> quote` for blockquotes
+- `* list` for unordered lists
+- `1. list` for ordered lists
+
+### Code blocks
+
+This part is important. Since the server has a lot of code blocks being shared around, it's highly
+recommended that you style your code blocks correctly with syntax highlighting. To do so, you use
+the three backticks (<code>\`\`\`</code>) syntax:
+
+````md
+```js
+console.log("Hello world!");
+```
+````
+
+The three backticks tell Markdown that the thing inside is a code block, and the `js` is there to
+support syntax highlighting. The above code block will look like this:
+
+```js
+console.log("Hello world!");
+```
+
+In the Next.js Discord server, typically you would frequently use some of the following languages:
+`js`, `jsx`, `ts` and `tsx`, though other languages like `diff`, `sh`, etc. work fine too. Remove
+the language identifier if you don't want to add syntax highlighting (e.g. when you paste the build
+log).
+
+## How can I get the helper role?
+
+The helper ⭐️ role is given to people who are recognised to be active and helpful to other members in
+the server. It doesn't have a hard rule in terms of eligility but generally speaking, you should be
+active in the server for a while, actively helping other members with answers that we recognise to
+be correct, helpful and have high quality (so if you are not sure the answer is correct, _at least_
+explicitly specify that; spreading misinformation is known to harm your chance if you intend to get
+this role in the future).
+
+The [number of accepted answers in the help forum](https://nextjs-forum.com) is a big factor, but
+once again, there is no hard rule on if and when you get the role.
+
+The helper role has a bit higher privileges than the normal member role, so we are very careful in
+giving it out. We seek your understandings.
+
+## Are the bots in the server open source and how can I contribute to them?
+
+Yes the two bots specific to this server are open source.
+
+- The Next.js bot source is _technically_ at
+  [vercel/nextjs-discord-bot](https://github.com/vercel/nextjs-discord-bot), though it is a bit
+  unmaintained for a while. The bot instance running in the server, as of 29 August 2023, is by a
+  fork of one of the admins of the server,
+  [rafaelalmeidatk/nextjs-discord-bot-1](https://github.com/rafaelalmeidatk/nextjs-discord-bot-1) so
+  if you want to contribute to the bot, you should contribute to that fork.
+
+- The Next.js Forum bot and web app are both open source at
+  [rafaelalmeidatk/nextjs-forum](https://github.com/rafaelalmeidatk/nextjs-forum).
+
+We always welcome feedbacks and contributions, whether by discussion in `#discord-feedback`, or by
+code contribution to the repositories above.
