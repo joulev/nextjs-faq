@@ -55,7 +55,7 @@ If we import a component dynamically with `ssr:false`, it will only run on the c
 use these APIs without any problem.
 
 ```ts
-import dynamic from "next/dyamic";
+import dynamic from "next/dynamic";
 
 const Page = dynamic(() => import("./content.tsx"), { ssr: false });
 
