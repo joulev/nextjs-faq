@@ -1,0 +1,64 @@
+---
+updated: 2023-09-14
+title: 
+    "Why is document,window,localStorage or sessionStorage undefined in client components?"
+messageContent:
+    "Don't use document,window,localStorage or sessionStorage in client components outside of
+  useEffect. See the reason why and some code examples [here](<link>)."
+---
+
+> I'm having this function in client component
+>
+> ```ts
+> "use client";
+> export default async function Page() {
+>   const [theme, setTheme] = useState(localStorage.getItem("theme"));
+> }
+> ```
+>
+> But I'm getting an error saying  
+> `ReferenceError: localStorage is not defined`
+>
+> Why is that? Isn't it supposed to work in client components?
+
+The name client component is quite misleading. It's not a component that runs in the browser. It's a
+component that runs on the **server** and the client. The code inside the component is executed
+first on the **server** and the client or in other words, it's pre rendered on the server and then
+hydrated on the client.
+
+### What's the fix for this?
+
+There are 2 fixes of this problem:
+
+- move logic using these APIs in `useEffect` hook.
+- import a component dynamically with `ssr:false
+  `
+
+### Moving logic in useEffect
+
+If we move the logic inside `useEffect` hook, it will only run on the client. So, we can use these
+APIs without any problem.
+
+```ts
+"use client";
+export default function Page() {
+  const [theme, setTheme] = useState(undefined);
+
+  useEffect(() => {
+    setTheme(localStorage.getItem("theme"));
+  }, []);
+}
+```
+
+### Importing component dynamically
+
+If we import a component dynamically with `ssr:false`, it will only run on the client. So, we can
+use these APIs without any problem.
+
+```ts
+import dynamic from "next/dyamic";
+
+const Page = dynamic(() => import("./content.tsx"), { ssr: false });
+
+export default Page;
+```
