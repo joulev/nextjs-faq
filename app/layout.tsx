@@ -2,10 +2,12 @@ import { Metadata } from "next";
 import { RootProvider } from "next-docs-ui/provider";
 import { DocsLayout } from "next-docs-ui/layout";
 import { Hanken_Grotesk } from "next/font/google";
-import { tree } from "./source";
+
+import { tree } from "@/app/source";
+import { TitleProvider } from "@/app/title-provider";
+
 import "next-docs-ui/style.css";
-import "./global.css";
-import { TitleProvider } from "./title-provider";
+import "@/app/global.css";
 
 const font = Hanken_Grotesk({ subsets: ["latin"] });
 

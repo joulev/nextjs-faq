@@ -4,7 +4,8 @@ import { HelpCircle } from "lucide-react";
 import { useMDXComponent } from "next-contentlayer/hooks";
 import defaultComponents from "next-docs-ui/mdx";
 import { SafeLink } from "next-docs-zeta/link";
-import { useTitle } from "../title-provider";
+
+import { useTitle } from "@/app/title-provider";
 
 const components = {
   ...defaultComponents,
