@@ -1,1 +1,3 @@
 pnpm-lock.yaml
+# prettier is a horrible mdx formatter
+*.mdx

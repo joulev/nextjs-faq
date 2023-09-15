@@ -1,9 +1,7 @@
 ---
-updated: 2023-09-14
+updated: 2023-09-15
 title: "Why are document, window, localStorage and sessionStorage undefined in client components?"
-messageContent:
-  "Don't use document, window, localStorage or sessionStorage in client components outside of
-  useEffect. See the reason why and some code examples [here](<link>)."
+authors: [PhantomKnight287, joulev]
 ---
 
 > I'm having this function in a client component
@@ -22,40 +20,50 @@ messageContent:
 >
 > Why is that? Isn't it supposed to work in client components?
 
-The name client component is quite misleading. It's not a component that _exclusively_ runs in the
-browser. It's a component that runs on the **server** and the client. The code inside the component
-is executed first on the **server** and the client or in other words, it's [pre rendered on the
-server and then hydrated on the client](https://nextjs.org/docs/app/building-your-application/rendering/client-components#full-page-load).
+The name "client component" is actually quite misleading. It's not a component that _exclusively_
+runs in the browser. It's a component that runs on the **server** and the client. The code inside
+the component is executed first on the **server** and the client or in other words, it's
+[prerendered on the server and then hydrated on the client](https://nextjs.org/docs/app/building-your-application/rendering/client-components#full-page-load).
 
-### What's the fix for this?
+During that initial prerendering, since the component is rendered on the server, it doesn't have
+access to the browser APIs named above. Hence you got that error.
 
 There are 2 fixes for this problem:
 
 - move logic using browser-specific APIs to `useEffect` (or an event handler, or any place that only
   runs on the client)
-- import a component dynamically with `next/dynamic` and `ssr: false
-  `
+- import a component dynamically with `next/dynamic` and `ssr: false`
 
-### Moving logic in `useEffect`
+## Moving logic to `useEffect`
 
 If we move the logic inside `useEffect` hook, it will only run on the client. So, we can use these
 APIs without any problem.
 
-```ts
+```tsx
 "use client";
+
 export default function Page() {
-  const [theme, setTheme] = useState(undefined);
+  const [theme, setTheme] = useState<string | null>(null);
 
   useEffect(() => {
     setTheme(localStorage.getItem("theme"));
   }, []);
+
+  if (!theme) return <div>Theme is loading</div>;
+  return <div>Theme is {theme}</div>;
 }
 ```
 
-### Use `next/dynamic` with `ssr: false`
+Note that if you do it this way, as you can see you need a loading state, which may cause a flash of
+unstyled content (FOUC). To overcome it, you have to use a `<script>` (or [`next/script`](https://nextjs.org/docs/app/building-your-application/optimizing/scripts))
+to get the value *before* hydration and configure styling based on that using *vanilla* JavaScript.
+For theming specifically, we recommend [`next-themes`](https://github.com/pacocoursey/next-themes)
+which handles this problem very well, so you don't have to touch all this `<script>` and `useEffect`
+shenanigans.
 
-If we
-[import a component dynamically with `ssr: false`](https://nextjs.org/docs/app/building-your-application/optimizing/lazy-loading#skipping-ssr),
+## Using `next/dynamic` with `ssr: false`
+
+If we [import a component dynamically with `ssr: false`](https://nextjs.org/docs/app/building-your-application/optimizing/lazy-loading#skipping-ssr),
 it will only run on the client, at the cost of the content not being available in the initial HTML
 (so crawlers may not be able to see it). If that is fine for you, you can proceed to use these APIs
 without any problem.
