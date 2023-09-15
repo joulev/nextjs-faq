@@ -14,16 +14,17 @@ export default function Home() {
           <Link href="https://discord.gg/nextjs">official Next.js server</Link>.
         </p>
         <p>
-          This website is a collection of my answers to some of the most commonly asked questions on
-          the server. I found myself answering these questions over and over again so I decided why
-          not make something so I can simply answer with a URL instead.
+          This website is a collection of the answers that some active server members and I have for
+          some of the most commonly asked questions on the server. I found myself answering these
+          questions over and over again so I decided why not make something so I can simply answer
+          with a URL instead.
         </p>
         <p>
-          The answers here are mine only and{" "}
-          <strong>not affiliated with Vercel or the Next.js team</strong>. Since Next.js is evolving
-          very fast, these answers might get outdated quickly. I try my best to keep them up to date
-          but that is not always possible. If you find any errors or would like to make
-          improvements, feel free to <Link href={`${REPO}/issues`}>open an issue</Link> or{" "}
+          The answers here are <strong>not affiliated with Vercel or the Next.js team</strong>.
+          Since Next.js is evolving very fast, these answers might get outdated quickly. I try my
+          best to keep them up to date but that is not always possible. If you find any errors or
+          would like to make improvements, feel free to{" "}
+          <Link href={`${REPO}/issues`}>open an issue</Link> or{" "}
           <Link href={`${REPO}/pulls`}>make a pull request</Link>.
         </p>
         <p>

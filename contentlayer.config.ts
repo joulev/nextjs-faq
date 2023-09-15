@@ -9,11 +9,6 @@ export default makeSource(
         description: "Last updated date of the post",
         required: true,
       },
-      messageContent: {
-        type: "string",
-        description: "Deprecated probably. No need to care about this property",
-        required: false,
-      },
     },
   }),
 );
