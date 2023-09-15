@@ -2,31 +2,26 @@
 
 import { HelpCircle } from "lucide-react";
 import { useMDXComponent } from "next-contentlayer/hooks";
-import { Card, Cards, Heading, Image, Link, Pre, Table } from "next-docs-ui/mdx";
+import defaultComponents from "next-docs-ui/mdx";
+import { SafeLink } from "next-docs-zeta/link";
+
+import { useTitle } from "@/app/title-provider";
 
 const components = {
-  Card,
-  Cards,
-  a: Link,
-  pre: Pre,
-  img: Image,
-  h1: (props: React.HTMLAttributes<HTMLHeadingElement>) => <Heading as="h1" {...props} />,
-  h2: (props: React.HTMLAttributes<HTMLHeadingElement>) => <Heading as="h2" {...props} />,
-  h3: (props: React.HTMLAttributes<HTMLHeadingElement>) => <Heading as="h3" {...props} />,
-  h4: (props: React.HTMLAttributes<HTMLHeadingElement>) => <Heading as="h4" {...props} />,
-  h5: (props: React.HTMLAttributes<HTMLHeadingElement>) => <Heading as="h5" {...props} />,
-  h6: (props: React.HTMLAttributes<HTMLHeadingElement>) => <Heading as="h6" {...props} />,
-  table: Table,
-  Question: ({ id }: { id: string }) => (
-    <>
-      &nbsp;
-      <span style={{ whiteSpace: "nowrap" }}>
-        <HelpCircle size="18" style={{ display: "inline-block", marginRight: 4 }} />
+  ...defaultComponents,
+  Question: ({ id }: { id: string }) => {
+    const title = useTitle(id);
+    return (
+      <>
         &nbsp;
-      </span>
-      <Link href={`/${id}`}>this post</Link>
-    </>
-  ),
+        <span className="whitespace-nowrap">
+          <HelpCircle size="18" className="inline-block text-daw-zinc-600 mr-1" />
+          &nbsp;
+        </span>
+        <SafeLink href={`/${id}`}>{title}</SafeLink>
+      </>
+    );
+  },
 };
 
 export function Content({ code }: { code: string }) {

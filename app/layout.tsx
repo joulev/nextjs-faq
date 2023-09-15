@@ -2,8 +2,12 @@ import { Metadata } from "next";
 import { RootProvider } from "next-docs-ui/provider";
 import { DocsLayout } from "next-docs-ui/layout";
 import { Hanken_Grotesk } from "next/font/google";
-import { tree } from "./tree";
+
+import { tree } from "@/app/source";
+import { TitleProvider } from "@/app/title-provider";
+
 import "next-docs-ui/style.css";
+import "@/app/global.css";
 
 const font = Hanken_Grotesk({ subsets: ["latin"] });
 
@@ -14,10 +18,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <RootProvider>
           <DocsLayout
             tree={tree}
-            githubUrl="https://github.com/joulev/nextjs-discord-common-questions"
-            navTitle="Next.js Discord Common Questions"
+            nav={{
+              title: "Next.js Discord Common Questions",
+              githubUrl: "https://github.com/joulev/nextjs-discord-common-questions",
+            }}
           >
-            {children}
+            <TitleProvider tree={tree}>{children}</TitleProvider>
           </DocsLayout>
         </RootProvider>
       </body>
