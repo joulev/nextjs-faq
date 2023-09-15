@@ -20,7 +20,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             tree={tree}
             nav={{
               title: "Next.js Discord Common Questions",
-              githubUrl: "https://github.com/joulev/nextjs-discord-common-questions",
+              githubUrl: "https://github.com/joulev/nextjs-faq",
             }}
           >
             <TitleProvider tree={tree}>{children}</TitleProvider>

@@ -74,7 +74,7 @@ export default async function Page({ params }: { params: { slug?: string[] } }) 
               <div className="flex flex-col gap-2 justify-start text-sm text-muted-foreground pt-4">
                 <SafeLink
                   className="hover:text-foreground transition-colors"
-                  href={`https://github.com/joulev/nextjs-discord-common-questions/blob/main/content/${page._raw.sourceFilePath}`}
+                  href={`https://github.com/joulev/nextjs-faq/blob/main/content/${page._raw.sourceFilePath}`}
                 >
                   <PenLine className="nd-inline nd-w-4 nd-h-4 nd-mr-2" />
                   Edit this page

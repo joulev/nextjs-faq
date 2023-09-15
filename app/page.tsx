@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { Link, MDXContent } from "next-docs-ui/mdx";
 import { DocsPage } from "next-docs-ui/page";
 
-const REPO = "https://github.com/joulev/nextjs-discord-common-questions";
+const REPO = "https://github.com/joulev/nextjs-faq";
 
 export default function Home() {
   return (
