@@ -4,9 +4,7 @@ title: Fetching own API endpoint in React Server Components
 authors: [joulev]
 ---
 
-> As part of data-fetching, I'm fetching the data from my own API routes or
-> [route handlers](https://nextjs.org/docs/app/building-your-application/routing/router-handlers)
-> with a `fetch` inside a server component like so:
+> As part of data-fetching, I'm fetching the data from my own API routes or [route handlers](https://nextjs.org/docs/app/building-your-application/routing/router-handlers) with a `fetch` inside a server component like so:
 >
 > ```tsx
 > export default async function Page() {
@@ -16,14 +14,9 @@ authors: [joulev]
 > }
 > ```
 >
-> While this works fine in dev mode, it fails to build. Also I had to use an absolute URL instead of
-> a nicer relative URL. Why is that? Is this the right way to fetch data?
+> While this works fine in dev mode, it fails to build. Also I had to use an absolute URL instead of a nicer relative URL. Why is that? Is this the right way to fetch data?
 
-No, this is not the right way to fetch data in server components. In short, do _not_ fetch your own
-API routes or route handlers (from now on, just "route handlers") in server components, instead just
-call the server-side logic directly. Imagine server components not as normal React components, but
-as the good old `getStaticProps` and `getServerSideProps`. Instead of the code above, you should do
-something like this:
+No, this is not the right way to fetch data in server components. In short, do _not_ fetch your own API routes or route handlers (from now on, just "route handlers") in server components, instead just call the server-side logic directly. Imagine server components not as normal React components, but as the good old `getStaticProps` and `getServerSideProps`. Instead of the code above, you should do something like this:
 
 ```tsx
 import { prisma } from "~/lib/prisma";
@@ -34,84 +27,46 @@ export default async function Page() {
 }
 ```
 
-**If you find yourself having to fetch from `localhost:3000` in your own Next.js app** (assuming
-this Next.js app runs on port 3000) **and the fetch requires an absolute URL, you are very likely
-doing something wrong**.
+**If you find yourself having to fetch from `localhost:3000` in your own Next.js app** (assuming this Next.js app runs on port 3000) **and the fetch requires an absolute URL, you are very likely doing something wrong**.
 
-If you worry about authentication or similar stuff,
-[`cookies`](https://nextjs.org/docs/app/api-reference/functions/cookies) and
-[`headers`](https://nextjs.org/docs/app/api-reference/functions/headers) are helpful.
+If you worry about authentication or similar stuff, [`cookies`](https://nextjs.org/docs/app/api-reference/functions/cookies) and [`headers`](https://nextjs.org/docs/app/api-reference/functions/headers) are helpful.
 
-Route handlers should be instead used for client-side fetching, interactions with other
-services/applications, etc. If you find yourself repeating code in both the server component and the
-route handler, you can extract the common code into a separate utility function (say,
-`getUser(id: number): User | null`) and import it in both places.
+Route handlers should be instead used for client-side fetching, interactions with other services/applications, etc. If you find yourself repeating code in both the server component and the route handler, you can extract the common code into a separate utility function (say, `getUser(id: number): User | null`) and import it in both places.
 
-Of course, this only applies to server components. In client components, you can fetch your own
-route handlers normally with `swr` or `react-query` (see also
-<Question id="when-client-component-in-app-router" />).
+Of course, this only applies to server components. In client components, you can fetch your own route handlers normally with `swr` or `react-query` (see also <Question id="when-client-component-in-app-router" />).
 
 Now read on to see why `fetch`-ing route handlers in server components is a bad idea.
 
 ## Why does it require absolute URLs?
 
-`fetch` in client-side does not require absolute URLs, because the browser knows the URL of the
-current page and hence can understand what host/domain to use. But, in server components, the fetch
-is run on the server, which is like running a `fetch` from a Node.js script inside your own
-computer. It doesn't know what host/domain to use (you don't know the domain of your computer do
-you?), so you have to specify it explicitly.
+`fetch` in client-side does not require absolute URLs, because the browser knows the URL of the current page and hence can understand what host/domain to use. But, in server components, the fetch is run on the server, which is like running a `fetch` from a Node.js script inside your own computer. It doesn't know what host/domain to use (you don't know the domain of your computer do you?), so you have to specify it explicitly.
 
 ## Why does it not work during build? Why does it work in dev mode?
 
-It requires the server to be running at (in the example above) `localhost:3000`. That is fulfilled
-during development mode and during runtime (`next start`), so the fetch works fine there. But during
-build, the server is not running, so the fetch fails.
+It requires the server to be running at (in the example above) `localhost:3000`. That is fulfilled during development mode and during runtime (`next start`), so the fetch works fine there. But during build, the server is not running, so the fetch fails.
 
 ## Why does the documentation describe `fetch` inside server components then? For what?
 
-For communicating with a separate backend service (`api.yourapp.com`) or a third-party API
-(`api.thirdparty.com`).
+For communicating with a separate backend service (`api.yourapp.com`) or a third-party API (`api.thirdparty.com`).
 
 ## Why does the official playground use normal `fetch` then? Why does it work there?
 
-Since the "backend" of [the official playground](https://github.com/vercel/app-playground) is just
-static data, if the playground follows the approach above, it would just be them importing static JS
-objects, which doesn't have high educational value in terms of demonstrating how the `app` router
-works. That's why they have to use `fetch`. This is just a special case.
+Since the "backend" of [the official playground](https://github.com/vercel/app-playground) is just static data, if the playground follows the approach above, it would just be them importing static JS objects, which doesn't have high educational value in terms of demonstrating how the `app` router works. That's why they have to use `fetch`. This is just a special case.
 
-And if you notice very carefully, they are actually fetching the current deployment during build,
-not the new server with newly updated route handler code. It counts as a separate backend service,
-that's why it works.
+And if you notice very carefully, they are actually fetching the current deployment during build, not the new server with newly updated route handler code. It counts as a separate backend service, that's why it works.
 
 ## What are the drawbacks of the approach?
 
-The most evident drawback of the approach is that it doesn't work (see above). But what if it _did_
-work, or what if you only use it in the limited scenarios where it does work? What are the drawbacks
-then?
+The most evident drawback of the approach is that it doesn't work (see above). But what if it _did_ work, or what if you only use it in the limited scenarios where it does work? What are the drawbacks then?
 
-- **The fetch does not have access to headers and cookies automatically.** You need to manually
-  extract the relevant informations with `headers` and `cookies` and pass them to the `fetch` call.
+- **The fetch does not have access to headers and cookies automatically.** You need to manually extract the relevant informations with `headers` and `cookies` and pass them to the `fetch` call.
 
-- **It is not type-safe.** In the examples above, if you use `fetch`, since the server component
-  knows nothing about what would be responded by the route handler, the type has to be `any` and you
-  have to manually type-check/validate the response. But if you use something like Prisma with
-  server components directly as above, the type is available automatically (so you know if something
-  can be `null` or you didn't typo `user.name` to `user.nmae`).
+- **It is not type-safe.** In the examples above, if you use `fetch`, since the server component knows nothing about what would be responded by the route handler, the type has to be `any` and you have to manually type-check/validate the response. But if you use something like Prisma with server components directly as above, the type is available automatically (so you know if something can be `null` or you didn't typo `user.name` to `user.nmae`).
 
-- **If you self-host, it is slower, albeit only _very very_ slightly.** It is essentially your
-  server fetching data from itself, while pretending itself as a separate server. The overhead added
-  by that pretense is small but it is there.
+- **If you self-host, it is slower, albeit only _very very_ slightly.** It is essentially your server fetching data from itself, while pretending itself as a separate server. The overhead added by that pretense is small but it is there.
 
-- **If you host the Next.js app on Vercel or a similar serverless platform, chances are it can be
-  significantly slower.** At least for Vercel's case, your route handlers and dynamic server
-  components are deployed to AWS Lambda, which can require a cold start if the lambda is not used
-  for a while. We don't know how Vercel bundles the route handlers and server components to
-  different lambdas, but if your route handler happens to need a cold start when you request the
-  server component, you are taking that cold start penalty that could've been avoided if you didn't
-  use a route handler in the first place.
+- **If you host the Next.js app on Vercel or a similar serverless platform, chances are it can be significantly slower.** At least for Vercel's case, your route handlers and dynamic server components are deployed to AWS Lambda, which can require a cold start if the lambda is not used for a while. We don't know how Vercel bundles the route handlers and server components to different lambdas, but if your route handler happens to need a cold start when you request the server component, you are taking that cold start penalty that could've been avoided if you didn't use a route handler in the first place.
 
-- **It brings zero benefits.** Server components are run exclusively on the server anyway, you need
-  not worry about server-side logic/variables leaking to the browser.
+- **It brings zero benefits.** Server components are run exclusively on the server anyway, you need not worry about server-side logic/variables leaking to the browser.
 
-- You would be shooting yourself and other future maintainers in the foot. That is generally a bad
-  idea.
+- You would be shooting yourself and other future maintainers in the foot. That is generally a bad idea.

@@ -1,8 +1,6 @@
 ---
 updated: 2023-05-22
-title:
-  Why is the session unavailable when I fetch the session route in next-auth from my server
-  component?
+title: Why is the session unavailable when I fetch the session route in next-auth from my server component?
 authors: [joulev]
 ---
 
@@ -27,23 +25,13 @@ authors: [joulev]
 >
 > Why is that? It used to work inside the `pages` directory&hellip;
 
-The cause is that the place that call this `getSession` function has changed. In the `pages`
-directory, the function was called in the browser, but in server components the function is called
-from your server.
+The cause is that the place that call this `getSession` function has changed. In the `pages` directory, the function was called in the browser, but in server components the function is called from your server.
 
-When the fetch is run from the browser, it automatically carries over all the relevant cookies that
-`next-auth` uses to identify the session. That is why it worked. But now, when the fetch is run from
-the server, it does not carry over the cookies, and the session is not found. It is like if you
-request that endpoint using `curl` in your terminal; there are no cookies automatically sent, you
-have to manually add cookies to the request if necessary.
+When the fetch is run from the browser, it automatically carries over all the relevant cookies that `next-auth` uses to identify the session. That is why it worked. But now, when the fetch is run from the server, it does not carry over the cookies, and the session is not found. It is like if you request that endpoint using `curl` in your terminal; there are no cookies automatically sent, you have to manually add cookies to the request if necessary.
 
-For `next-auth`, you have
-[`getServerSession`](https://next-auth.js.org/configuration/nextjs#in-app-directory) which can do
-exactly what that `getSession` is supposed to do, so just use it instead of trying to make your own
-session retrieval function.
+For `next-auth`, you have [`getServerSession`](https://next-auth.js.org/configuration/nextjs#in-app-directory) which can do exactly what that `getSession` is supposed to do, so just use it instead of trying to make your own session retrieval function.
 
-Generally speaking, you should not fetch your own route handlers (like `/api/auth/session` in this
-case) inside your own server. For more details, see
-<Question id="fetch-api-in-rsc" />. Note that this does not
-apply to _external_ server, e.g. your separate Express server. In that case, whether you should do
-this depends on many factors.
+Generally speaking, you should not fetch your own route handlers (like `/api/auth/session` in this case) inside your own server. For more details, see
+
+<Question id="fetch-api-in-rsc" />. Note that this does not apply to _external_ server, e.g. your
+separate Express server. In that case, whether you should do this depends on many factors.

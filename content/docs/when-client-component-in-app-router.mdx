@@ -4,23 +4,16 @@ title: When is a component a client component, in the app router?
 authors: [joulev]
 ---
 
-> When is a component a client component, in the app router? Does adding context providers make the
-> entire app client components?
+> When is a component a client component, in the app router? Does adding context providers make the entire app client components?
 
 A component is only a client component if:
 
 - it is explicitly marked as a client component, using the `"use client"` directive, or
 - it is imported to a client component.
 
-In all other cases, the component is a server component. That includes when the component is passed
-as props (e.g. `children`) to a client component. Hence, you can
-[wrap layout files' `children` inside context providers](https://nextjs.org/docs/getting-started/react-essentials#context)
-without losing the server component benefits in your application (i.e. your pages are still server
-components by default unless you explicitly opt out with `"use client"`).
+In all other cases, the component is a server component. That includes when the component is passed as props (e.g. `children`) to a client component. Hence, you can [wrap layout files' `children` inside context providers](https://nextjs.org/docs/getting-started/react-essentials#context) without losing the server component benefits in your application (i.e. your pages are still server components by default unless you explicitly opt out with `"use client"`).
 
-Do note that when a component X is imported to a client component Y, X is rendered as a client
-component for that case only, and is still a server component by default elsewhere, unless you
-explicitly used the `"use client"` directive.
+Do note that when a component X is imported to a client component Y, X is rendered as a client component for that case only, and is still a server component by default elsewhere, unless you explicitly used the `"use client"` directive.
 
 ## Example
 
@@ -62,5 +55,4 @@ export default function AnotherServerComponent() {
 }
 ```
 
-then `ServerComponent` is rendered as a server component as expected (except if
-`AnotherServerComponent` is imported to a different client component).
+then `ServerComponent` is rendered as a server component as expected (except if `AnotherServerComponent` is imported to a different client component).
