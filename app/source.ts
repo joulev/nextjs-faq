@@ -2,7 +2,7 @@ import { allDocs, allMeta } from "contentlayer/generated";
 import { createContentlayer } from "next-docs-zeta/contentlayer";
 import { PageTree } from "next-docs-zeta/server";
 
-const offTopic = ["/non-nextjs-questions", "/good-question"]
+const offTopic = ["/non-nextjs-questions", "/good-question"];
 
 const {
   tree: originalTree,
@@ -18,10 +18,8 @@ export const tree: PageTree = {
     { type: "page", name: "About this site", url: "/" },
     { type: "separator", name: "Discord-specific" },
     { type: "page", name: "Non-Next.js Questions", url: "/non-nextjs-questions" },
-    { type: "page", name: "Write a Good Question", url: "/good-question" },
+    { type: "page", name: "How to ask a good question", url: "/good-question" },
     { type: "separator", name: "Questions" },
-    ...originalTree.children.filter(
-      node => node.type !== "page" || !offTopic.includes(node.url),
-    ),
+    ...originalTree.children.filter(node => node.type !== "page" || !offTopic.includes(node.url)),
   ],
 };
