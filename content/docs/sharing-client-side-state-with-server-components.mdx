@@ -40,9 +40,9 @@ export function Search() {
   };
 
   return (
-    <div className="flex gap-x-4">
-      <input type="text" className="border border-black rounded px-2 flex-1" onChange={onChange} />
-      {isPending && <div className="animate-spin">🔄</div>}
+    <div>
+      <input type="text" onChange={onChange} />
+      {isPending && <div>Loading...</div>}
     </div>
   );
 }
@@ -53,31 +53,17 @@ export function Search() {
 When utilizing the search box, URLs will now include a `q` search parameter containing the user-entered value. A page can access this value through the [`searchParams`](https://nextjs.org/docs/app/api-reference/file-conventions/page#searchparams-optional) object within its context and subsequently perform data fetching based on this value. Here's how it can be done:
 
 ```tsx
-import { db, itemsTable } from "@/database";
-import { like } from "drizzle-orm";
-import { ItemCard, Search } from "@/app/components";
+import { searchItemsByQuery } from "@/database";
+import { Search } from "./search"; // above component
 
 export default async function Page({ searchParams }: { searchParams: { q?: string } }) {
-  const items = await db
-    .select({
-      id: itemsTable.id,
-      name: itemsTable.name,
-      imageUri: itemsTable.imageUri,
-    })
-    .from(itemsTable)
-    // For an actual MySQL fulltext index you'd use the following instead:
-    // MATCH (name) AGAINST ('*${searchParams.q}*' IN BOOLEAN MODE)
-    .where(like(itemsTable.name, `%${searchParams.q ?? ""}%`))
-    .limit(20);
-
+  const items = await searchItemsByQuery(searchParams.q ?? "");
   return (
-    <main className="min-h-screen p-8 flex flex-col gap-y-8">
+    <main>
       <Search />
-      <div className="grid grid-cols-4 gap-2 justify-items-center">
-        {items.map(it => (
-          <ItemCard key={it.id} id={it.id} imageUri={it.imageUri} name={it.name} />
-        ))}
-      </div>
+      {items.map(item => (
+        <div key={item.id}>{item.name}</div>
+      ))}
     </main>
   );
 }
