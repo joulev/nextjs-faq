@@ -1,0 +1,80 @@
+---
+updated: 2023-10-06
+title: Sharing client-side state with server components
+authors: [ChristianIvicevic]
+---
+
+> I have a client component and want to pass some state to a (parent) server component. How do I achieve this?
+
+First, it's important to remember that server components run only once during a request to the server and don't update locally, as they are stateless and non-interactive. Since server components do not store any persistent state, you need to transmit data to them using headers, cookies, or URL search parameters. Among these options, URL search parameters are the most commonly used approach. Consequently, any state you wish to share with parent server components will always necessitate initiating a new request.
+
+## Sending state from the client-side to the server
+
+Let's consider a scenario where you have a search box that needs to enable server-side filtering, leveraging Next.js's SSR capabilities. Here's what you can do: attach an `onChange` event handler to the search box and link the current value to the URL search parameters, for example, `/items?q=something`. This action will automatically prompt the page to be requested once more, with the search parameters updated accordingly.
+
+```tsx
+"use client";
+
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { type ChangeEvent, useTransition } from "react";
+
+export function Search() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const [isPending, startTransition] = useTransition();
+
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const updatedSearchParams = new URLSearchParams(searchParams);
+
+    if (e.target.value) {
+      updatedSearchParams.set("q", e.target.value);
+    } else {
+      updatedSearchParams.delete("q");
+    }
+
+    startTransition(() => {
+      router.replace(`${pathname}?${updatedSearchParams.toString()}`);
+    });
+  };
+
+  return (
+    <div>
+      <input type="text" onChange={onChange} />
+      {isPending && <div>Loading...</div>}
+    </div>
+  );
+}
+```
+
+## Adjusting filtering logic based on supplied client-side state
+
+When utilizing the search box, URLs will now include a `q` search parameter containing the user-entered value. A page can access this value through the [`searchParams`](https://nextjs.org/docs/app/api-reference/file-conventions/page#searchparams-optional) object within its context and subsequently perform data fetching based on this value. Here's how it can be done:
+
+```tsx
+import { searchItemsByQuery } from "@/database";
+import { Search } from "./search"; // above component
+
+export default async function Page({ searchParams }: { searchParams: { q?: string } }) {
+  const items = await searchItemsByQuery(searchParams.q ?? "");
+  return (
+    <main>
+      <Search />
+      {items.map(item => (
+        <div key={item.id}>{item.name}</div>
+      ))}
+    </main>
+  );
+}
+```
+
+## Caveats
+
+### Debouncing requests
+
+In the previous code snippets, we updated the URL search parameters with every single change. However, it's important to note that this approach triggers a server request for each change. To optimize this and avoid overwhelming your server with requests, it's highly advisable to implement a debounce mechanism when invoking the `onChange` function. This helps prevent unintentional DDoS-like behavior caused by rapid and frequent user interactions.
+
+### Wrapping router changes using a transition
+
+You might have noticed the inclusion of `useTransition` in the search box code, and it might not be a familiar concept at this point. Its purpose is crucial—it helps prevent unintended UI freezes when dealing with lengthy operations like network requests. For a deeper understanding and detailed examples of why `useTransition` is necessary, please refer to the [official React API reference on `useTransition`](https://react.dev/reference/react/useTransition).
