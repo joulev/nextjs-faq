@@ -13,42 +13,38 @@ First, it's important to remember that server components run only once during a 
 Let's consider a scenario where you have a search box that needs to enable server-side filtering, leveraging Next.js's SSR capabilities. Here's what you can do: attach an `onChange` event handler to the search box and link the current value to the URL search parameters, for example, `/items?q=something`. This action will automatically prompt the page to be requested once more, with the search parameters updated accordingly.
 
 ```tsx
-'use client'
+"use client";
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { type ChangeEvent, useTransition } from "react"
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { type ChangeEvent, useTransition } from "react";
 
 export function Search() {
-  const router = useRouter()
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-  const [isPending, startTransition] = useTransition()
+  const [isPending, startTransition] = useTransition();
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const updatedSearchParams = new URLSearchParams(searchParams)
+    const updatedSearchParams = new URLSearchParams(searchParams);
 
     if (e.target.value) {
-      updatedSearchParams.set('q', e.target.value)
+      updatedSearchParams.set("q", e.target.value);
     } else {
-      updatedSearchParams.delete('q')
+      updatedSearchParams.delete("q");
     }
 
     startTransition(() => {
-      router.replace(`${pathname}?${updatedSearchParams.toString()}`)
-    })
-  }
+      router.replace(`${pathname}?${updatedSearchParams.toString()}`);
+    });
+  };
 
   return (
     <div className="flex gap-x-4">
-      <input
-        type="text"
-        className="border border-black rounded px-2 flex-1"
-        onChange={onChange}
-      />
+      <input type="text" className="border border-black rounded px-2 flex-1" onChange={onChange} />
       {isPending && <div className="animate-spin">🔄</div>}
     </div>
-  )
+  );
 }
 ```
 
@@ -57,15 +53,11 @@ export function Search() {
 When utilizing the search box, URLs will now include a `q` search parameter containing the user-entered value. A page can access this value through the [`searchParams`](https://nextjs.org/docs/app/api-reference/file-conventions/page#searchparams-optional) object within its context and subsequently perform data fetching based on this value. Here's how it can be done:
 
 ```tsx
-import { db, itemsTable } from '@/database'
-import { like } from 'drizzle-orm'
-import { ItemCard, Search } from '@/app/components'
+import { db, itemsTable } from "@/database";
+import { like } from "drizzle-orm";
+import { ItemCard, Search } from "@/app/components";
 
-export default async function Page({
-  searchParams
-}: {
-  searchParams: { q?: string }
-}) {
+export default async function Page({ searchParams }: { searchParams: { q?: string } }) {
   const items = await db
     .select({
       id: itemsTable.id,
@@ -75,24 +67,19 @@ export default async function Page({
     .from(itemsTable)
     // For an actual MySQL fulltext index you'd use the following instead:
     // MATCH (name) AGAINST ('*${searchParams.q}*' IN BOOLEAN MODE)
-    .where(like(itemsTable.name, `%${searchParams.q ?? ''}%`))
-    .limit(20)
+    .where(like(itemsTable.name, `%${searchParams.q ?? ""}%`))
+    .limit(20);
 
   return (
     <main className="min-h-screen p-8 flex flex-col gap-y-8">
       <Search />
       <div className="grid grid-cols-4 gap-2 justify-items-center">
-        {items.map((it) => (
-          <ItemCard
-            key={it.id}
-            id={it.id}
-            imageUri={it.imageUri}
-            name={it.name}
-          />
+        {items.map(it => (
+          <ItemCard key={it.id} id={it.id} imageUri={it.imageUri} name={it.name} />
         ))}
       </div>
     </main>
-  )
+  );
 }
 ```
 
