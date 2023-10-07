@@ -10,7 +10,6 @@ import { findNeighbour, getTableOfContents } from "next-docs-zeta/server";
 import { getPage, getPageUrl, tree } from "@/app/source";
 
 import { Content } from "./content";
-import { TOC } from "./toc";
 import { CopyButton } from "./copy-button";
 
 function formatDate(date: Date) {
@@ -39,52 +38,43 @@ export default async function Page({ params }: { params: { slug?: string[] } }) 
       toc={toc}
       footer={neighbour}
       tableOfContent={{
-        component: (
-          <TOC
-            items={toc}
-            header={
-              <div className="grid grid-cols-3 text-sm gap-y-4 text-muted-foreground pb-4">
-                <div>Updated:</div>
-                <time
-                  dateTime={updatedISO}
-                  title={updatedISO}
-                  className="col-span-2 text-foreground"
-                >
-                  {updatedHuman}
-                </time>
-                <div>Author{page.authors.length > 1 ? "s" : ""}:</div>
-                <div className="col-span-2 flex flex-col gap-2">
-                  {page.authors.map(author => (
-                    <SafeLink
-                      key={author}
-                      href={`https://github.com/${author}`}
-                      className="text-foreground transition-colors flex flex-row items-center gap-2 group"
-                    >
-                      <img
-                        src={`https://github.com/${author}.png?size=16`}
-                        className="w-4 h-4 rounded-full border border-background group-hover:border-muted-foreground transition-colors"
-                      />
-                      <span className="flex-grow truncate">{author}</span>
-                    </SafeLink>
-                  ))}
-                </div>
-              </div>
-            }
-            footer={
-              <div className="flex flex-col gap-2 justify-start text-sm text-muted-foreground pt-4">
+        header: (
+          <div className="grid grid-cols-3 text-sm gap-y-4 text-muted-foreground">
+            <div>Updated:</div>
+            <time dateTime={updatedISO} title={updatedISO} className="col-span-2 text-foreground">
+              {updatedHuman}
+            </time>
+            <div>Author{page.authors.length > 1 ? "s" : ""}:</div>
+            <div className="col-span-2 flex flex-col gap-2">
+              {page.authors.map(author => (
                 <SafeLink
-                  className="hover:text-foreground transition-colors"
-                  href={`https://github.com/joulev/nextjs-faq/blob/main/content/${page._raw.sourceFilePath}`}
+                  key={author}
+                  href={`https://github.com/${author}`}
+                  className="text-foreground transition-colors flex flex-row items-center gap-2 group"
                 >
-                  <PenLine className="nd-inline nd-w-4 nd-h-4 nd-mr-2" />
-                  Edit this page
+                  <img
+                    src={`https://github.com/${author}.png?size=16`}
+                    className="w-4 h-4 rounded-full border border-background group-hover:border-muted-foreground transition-colors"
+                  />
+                  <span className="flex-grow truncate">{author}</span>
                 </SafeLink>
-                <div>
-                  <CopyButton className="hover:text-foreground transition-colors" />
-                </div>
-              </div>
-            }
-          />
+              ))}
+            </div>
+          </div>
+        ),
+        footer: (
+          <div className="flex flex-col gap-2 justify-start text-sm text-muted-foreground">
+            <SafeLink
+              className="hover:text-foreground transition-colors"
+              href={`https://github.com/joulev/nextjs-faq/blob/main/content/${page._raw.sourceFilePath}`}
+            >
+              <PenLine className="nd-inline nd-w-4 nd-h-4 nd-mr-2" />
+              Edit this page
+            </SafeLink>
+            <div>
+              <CopyButton className="hover:text-foreground transition-colors" />
+            </div>
+          </div>
         ),
       }}
     >

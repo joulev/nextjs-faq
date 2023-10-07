@@ -26,8 +26,7 @@ During that initial prerendering, since the component is rendered on the server,
 There are 2 fixes for this problem:
 
 - move logic using browser-specific APIs to `useEffect` (or an event handler, or any place that only runs on the client)
-- import a component dynamically with `next/dynamic` and `ssr: false
-  `
+- use the component dynamically with `next/dynamic` and `ssr: false`
 
 ## Moving logic to `useEffect`
 

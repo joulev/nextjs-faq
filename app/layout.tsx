@@ -13,7 +13,7 @@ const font = Hanken_Grotesk({ subsets: ["latin"] });
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={font.className}>
+    <html lang="en" className={font.className} suppressHydrationWarning>
       <body>
         <RootProvider>
           <DocsLayout
