@@ -1,10 +1,13 @@
-/** @type {import('next').NextConfig} */
+// @ts-check
+
+const { withContentlayer } = require("next-contentlayer");
+
+/** @type {import("next").NextConfig} */
 const config = {
   pageExtensions: ["ts", "tsx", "js", "jsx"],
   reactStrictMode: true,
-  eslint: {
-    // Replaced by root workspace command
-    ignoreDuringBuilds: true,
+  experimental: {
+    webpackBuildWorker: true,
   },
   redirects: async () => [
     {
@@ -79,7 +82,5 @@ const config = {
     },
   ],
 };
-
-const { withContentlayer } = require("next-contentlayer");
 
 module.exports = withContentlayer(config);
