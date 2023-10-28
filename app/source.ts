@@ -14,8 +14,6 @@ export { getPage, getPageUrl };
 export const tree: PageTree = {
   name: "Docs",
   children: [
-    { type: "separator", name: "About" },
-    { type: "page", name: "About this site", url: "/" },
     { type: "separator", name: "Discord-specific" },
     { type: "page", name: "Non-Next.js Questions", url: "/non-nextjs-questions" },
     { type: "page", name: "How to ask a good question", url: "/good-question" },

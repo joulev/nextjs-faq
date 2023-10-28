@@ -41,5 +41,5 @@ export default function Home() {
 }
 
 export const metadata: Metadata = {
-  title: "Answers to Next.js Discord common questions",
+  title: "FAQ for the Next.js Discord server",
 };
