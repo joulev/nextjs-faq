@@ -12,6 +12,7 @@
     "autoprefixer": "10.4.16",
     "clsx": "2.0.0",
     "contentlayer": "0.3.4",
+    "geist": "1.0.0",
     "lucide-react": "0.290.0",
     "next": "14.0.0",
     "next-contentlayer": "0.3.4",

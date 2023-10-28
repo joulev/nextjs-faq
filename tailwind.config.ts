@@ -1,4 +1,5 @@
 import { Config } from "tailwindcss";
+import defaultTheme from "tailwindcss/defaultTheme";
 
 export default {
   darkMode: "class",
@@ -10,6 +11,10 @@ export default {
       screens: {
         "2xl": "1200px",
       },
+    },
+    fontFamily: {
+      sans: ["var(--font-geist-sans)", ...defaultTheme.fontFamily.sans],
+      mono: ["var(--font-geist-mono)", ...defaultTheme.fontFamily.mono],
     },
     extend: {
       colors: {

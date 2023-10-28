@@ -80,7 +80,7 @@ export default async function Page({ params }: { params: { slug?: string[] } }) 
     >
       <MDXContent>
         <h1>{page.title}</h1>
-        <div className="xl:hidden flex flex-row text-sm text-muted-foreground divide-x">
+        <div className="lg:hidden flex flex-row text-sm text-muted-foreground divide-x">
           <time dateTime={updatedISO} title={updatedISO} className="pr-4">
             {updatedHuman}
           </time>

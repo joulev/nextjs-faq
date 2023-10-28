@@ -1,16 +1,16 @@
+import { GeistSans, GeistMono } from "geist/font";
+import { GithubIcon } from "lucide-react";
 import { RootProvider } from "next-docs-ui/provider";
 import { DocsLayout } from "next-docs-ui/layout";
-import { Hanken_Grotesk } from "next/font/google";
 import { Nav } from "next-docs-ui/nav";
 
 import { tree } from "@/app/source";
 import { TitleProvider } from "@/app/title-provider";
 
+import { cn } from "@/lib/cn";
+
 import "next-docs-ui/style.css";
 import "@/app/global.css";
-import { GithubIcon } from "lucide-react";
-
-const font = Hanken_Grotesk({ subsets: ["latin"] });
 
 // https://remixicon.com/icon/discord-line
 function Discord({ className }: { className?: string }) {
@@ -26,7 +26,15 @@ function Discord({ className }: { className?: string }) {
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={font.className} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={cn(
+        GeistSans.variable,
+        GeistMono.variable,
+        "font-sans [&_code]:font-mono [&_code]:not-italic [&_code]:font-normal",
+      )}
+      suppressHydrationWarning
+    >
       <body>
         <RootProvider>
           <DocsLayout
