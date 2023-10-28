@@ -19,7 +19,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <DocsLayout
             tree={tree}
             nav={{
-              title: "Next.js Discord Common Questions",
+              title: <>FAQ for the Next.js Discord&nbsp;server</>,
               githubUrl: "https://github.com/joulev/nextjs-faq",
             }}
           >

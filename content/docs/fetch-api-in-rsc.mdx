@@ -1,5 +1,5 @@
 ---
-updated: 2023-06-14
+updated: 2023-10-28
 title: Fetching own API endpoint in React Server Components
 authors: [joulev]
 ---
@@ -33,7 +33,7 @@ If you worry about authentication or similar stuff, [`cookies`](https://nextjs.o
 
 Route handlers should be instead used for client-side fetching, interactions with other services/applications, etc. If you find yourself repeating code in both the server component and the route handler, you can extract the common code into a separate utility function (say, `getUser(id: number): User | null`) and import it in both places.
 
-Of course, this only applies to server components. In client components, you can fetch your own route handlers normally with `swr` or `react-query` (see also <Question id="when-client-component-in-app-router" />).
+Of course, this only applies to server components. In client components, you can fetch your own route handlers normally with `swr` or `react-query` (see also <Question id="when-client-component-in-app-router" />). That being said, we recommend you to use [server actions](https://nextjs.org/docs/app/building-your-application/data-fetching/forms-and-mutations) for mutations, because it integrates very nicely with the React router used by the `app` directory.
 
 Now read on to see why `fetch`-ing route handlers in server components is a bad idea.
 
@@ -48,12 +48,6 @@ It requires the server to be running at (in the example above) `localhost:3000`.
 ## Why does the documentation describe `fetch` inside server components then? For what?
 
 For communicating with a separate backend service (`api.yourapp.com`) or a third-party API (`api.thirdparty.com`).
-
-## Why does the official playground use normal `fetch` then? Why does it work there?
-
-Since the "backend" of [the official playground](https://github.com/vercel/app-playground) is just static data, if the playground follows the approach above, it would just be them importing static JS objects, which doesn't have high educational value in terms of demonstrating how the `app` router works. That's why they have to use `fetch`. This is just a special case.
-
-And if you notice very carefully, they are actually fetching the current deployment during build, not the new server with newly updated route handler code. It counts as a separate backend service, that's why it works.
 
 ## What are the drawbacks of the approach?
 
