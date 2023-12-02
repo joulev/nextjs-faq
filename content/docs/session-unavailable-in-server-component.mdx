@@ -31,7 +31,4 @@ When the fetch is run from the browser, it automatically carries over all the re
 
 For `next-auth`, you have [`getServerSession`](https://next-auth.js.org/configuration/nextjs#in-app-directory) which can do exactly what that `getSession` is supposed to do, so just use it instead of trying to make your own session retrieval function.
 
-Generally speaking, you should not fetch your own route handlers (like `/api/auth/session` in this case) inside your own server. For more details, see
-
-<Question id="fetch-api-in-rsc" />. Note that this does not apply to _external_ server, e.g. your
-separate Express server. In that case, whether you should do this depends on many factors.
+Generally speaking, you should not fetch your own route handlers (like `/api/auth/session` in this case) inside your own server. For more details, see <Question id="fetch-api-in-rsc" />. Note that this does not apply to _external_ server, e.g. your separate Express server. In that case, whether you should do this depends on many factors.

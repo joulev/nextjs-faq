@@ -8,14 +8,11 @@ export default function Home() {
   return (
     <DocsPage>
       <MDXContent>
+        <h1>About nextjs-faq</h1>
         <p>
-          I am <Link href="https://github.com/joulev">@joulev</Link>, a Next.js user, an active
-          helper and moderator on the{" "}
-          <Link href="https://discord.gg/nextjs">official Next.js server</Link>.
-        </p>
-        <p>
-          This website is a collection of the answers that some active server members and I have for
-          some of the most commonly asked questions on the server. I found myself answering these
+          This website is a collection of the answers that some active server members of the{" "}
+          <Link href="https://discord.gg/nextjs">official Next.js server</Link> and I have for some
+          of the most commonly asked questions on the server. I found myself answering these
           questions over and over again so I decided why not make something so I can simply answer
           with a URL instead.
         </p>
@@ -34,6 +31,13 @@ export default function Home() {
         </p>
         <p>
           Built with <Link href="https://github.com/SonMooSans/next-docs">next-docs</Link>.
+        </p>
+        <h2>About the owner</h2>
+        <p>
+          I am <Link href="https://github.com/joulev">@joulev</Link>, a Next.js user. I used to be
+          an active helper and moderator in the Next.js server, which is when this site was created.
+          I am no longer active in the server but I still try to keep this site up to date and I
+          still welcome feedbacks and contributions.
         </p>
       </MDXContent>
     </DocsPage>
