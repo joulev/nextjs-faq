@@ -11,6 +11,7 @@ import { cn } from "@/lib/cn";
 
 import "next-docs-ui/style.css";
 import "@/app/global.css";
+import { Metadata } from "next";
 
 // https://remixicon.com/icon/discord-line
 function Discord({ className }: { className?: string }) {
@@ -70,3 +71,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     </html>
   );
 }
+
+export const metadata: Metadata = {
+  metadataBase: new URL("https://nextjs-faq.com"),
+};
