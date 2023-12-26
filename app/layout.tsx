@@ -45,7 +45,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <Nav
                   title={<>FAQ for the Next.js Discord&nbsp;server</>}
                   collapsibleSidebar={false}
-                  items={[{ href: "/", children: "About this site" }]}
+                  items={[
+                    { href: "/", children: "About this site" },
+                    { href: "https://nextjs-forum.com", children: "nextjs-forum.com" },
+                  ]}
                   links={[
                     {
                       label: "Github",
