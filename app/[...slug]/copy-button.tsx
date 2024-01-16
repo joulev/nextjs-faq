@@ -16,12 +16,12 @@ export function CopyButton({ className }: { className?: string }) {
     <button onClick={copy} className={className}>
       {showCopied ? (
         <>
-          <Check className="nd-inline nd-w-4 nd-h-4 nd-mr-2" />
+          <Check className="inline size-4 mr-2" />
           Copied!
         </>
       ) : (
         <>
-          <Copy className="nd-inline nd-w-4 nd-h-4 nd-mr-2" />
+          <Copy className="inline size-4 mr-2" />
           Copy link
         </>
       )}

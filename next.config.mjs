@@ -1,14 +1,11 @@
 // @ts-check
+import createNextDocsMDX from "next-docs-mdx/config";
 
-const { withContentlayer } = require("next-contentlayer");
+const withMDX = createNextDocsMDX();
 
 /** @type {import("next").NextConfig} */
 const config = {
-  pageExtensions: ["ts", "tsx", "js", "jsx"],
   reactStrictMode: true,
-  experimental: {
-    webpackBuildWorker: true,
-  },
   redirects: async () => [
     {
       source: "/add-headers-and-status-to-response-in-route-handlers",
@@ -83,4 +80,4 @@ const config = {
   ],
 };
 
-module.exports = withContentlayer(config);
+export default withMDX(config);

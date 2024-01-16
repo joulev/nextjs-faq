@@ -1,16 +1,10 @@
-import { allDocs } from "contentlayer/generated";
-import { PenLine } from "lucide-react";
-import { Metadata } from "next";
+import { getPage, getPages } from "@/app/source";
+import type { Metadata } from "next";
+import { DocsPage, DocsBody } from "next-docs-ui/page";
 import { notFound } from "next/navigation";
-import { MDXContent } from "next-docs-ui/mdx";
-import { SafeLink } from "next-docs-zeta/link";
-import { DocsPage } from "next-docs-ui/page";
-import { findNeighbour, getTableOfContents } from "next-docs-zeta/server";
-
-import { getPage, getPageUrl, tree } from "@/app/source";
-
-import { Content } from "./content";
 import { CopyButton } from "./copy-button";
+import Link from "next/link";
+import { PenLine } from "lucide-react";
 
 function formatDate(date: Date) {
   const formatter = new Intl.DateTimeFormat("en-GB", {
@@ -21,41 +15,35 @@ function formatDate(date: Date) {
   return formatter.format(date); // 1 January 2021
 }
 
-export default async function Page({ params }: { params: { slug?: string[] } }) {
+export default function Page({ params }: { params: { slug: string[] } }) {
   const page = getPage(params.slug);
 
-  if (page == null) {
-    notFound();
-  }
+  if (!page) notFound();
 
-  const toc = await getTableOfContents(page.body.raw);
-  const neighbour = findNeighbour(tree, getPageUrl(params.slug));
-  const updated = new Date(page.updated);
+  const updated = new Date(page.data.updated);
   const [updatedISO, updatedHuman] = [updated.toISOString(), formatDate(updated)];
+
+  const MDX = page.data.exports.default;
 
   return (
     <DocsPage
-      toc={toc}
-      footer={neighbour}
+      toc={page.data.exports.toc}
       tableOfContent={{
         header: (
           <div className="flex flex-col gap-6">
-            <SafeLink
-              href="/"
-              className="bg-yellow-500/20 border-yellow-500 border rounded p-4 text-sm"
-            >
+            <Link href="/" className="bg-secondary/50 rounded-lg border border-border p-4 text-sm">
               This site is a community collaboration of the Next.js Discord server members. This is{" "}
               <strong>NOT</strong> an official Next.js website.
-            </SafeLink>
+            </Link>
             <div className="grid grid-cols-3 text-sm gap-y-4 text-muted-foreground">
               <div>Updated:</div>
               <time dateTime={updatedISO} title={updatedISO} className="col-span-2 text-foreground">
                 {updatedHuman}
               </time>
-              <div>Author{page.authors.length > 1 ? "s" : ""}:</div>
+              <div>Author{page.data.authors.length > 1 ? "s" : ""}:</div>
               <div className="col-span-2 flex flex-col gap-2">
-                {page.authors.map(author => (
-                  <SafeLink
+                {page.data.authors.map(author => (
+                  <Link
                     key={author}
                     href={`https://github.com/${author}`}
                     className="text-foreground transition-colors flex flex-row items-center gap-2 group"
@@ -65,7 +53,7 @@ export default async function Page({ params }: { params: { slug?: string[] } }) 
                       className="w-4 h-4 rounded-full border border-background group-hover:border-muted-foreground transition-colors"
                     />
                     <span className="flex-grow truncate">{author}</span>
-                  </SafeLink>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -73,13 +61,13 @@ export default async function Page({ params }: { params: { slug?: string[] } }) 
         ),
         footer: (
           <div className="flex flex-col gap-2 justify-start text-sm text-muted-foreground">
-            <SafeLink
+            <Link
               className="hover:text-foreground transition-colors"
-              href={`https://github.com/joulev/nextjs-faq/blob/main/content/${page._raw.sourceFilePath}`}
+              href={`https://github.com/joulev/nextjs-faq/blob/main/content/docs${page.url}.mdx`}
             >
-              <PenLine className="nd-inline nd-w-4 nd-h-4 nd-mr-2" />
+              <PenLine className="inline size-4 mr-2" />
               Edit this page
-            </SafeLink>
+            </Link>
             <div>
               <CopyButton className="hover:text-foreground transition-colors" />
             </div>
@@ -87,8 +75,8 @@ export default async function Page({ params }: { params: { slug?: string[] } }) 
         ),
       }}
     >
-      <MDXContent>
-        <h1>{page.title}</h1>
+      <DocsBody>
+        <h1>{page.data.title}</h1>
         <div className="lg:hidden flex flex-row text-sm text-muted-foreground divide-x">
           <time dateTime={updatedISO} title={updatedISO} className="pr-4">
             {updatedHuman}
@@ -97,25 +85,25 @@ export default async function Page({ params }: { params: { slug?: string[] } }) 
             <CopyButton className="hover:text-foreground transition-colors" />
           </div>
         </div>
-        <Content code={page.body.code} />
-      </MDXContent>
+        <MDX />
+      </DocsBody>
     </DocsPage>
   );
 }
 
-export async function generateStaticParams(): Promise<{ slug: string[] }[]> {
-  return allDocs.map(page => ({
-    slug: page.slug.split("/"),
-  }));
+export function generateStaticParams() {
+  return getPages().map(page => ({ slug: page.slugs }));
 }
 
-export function generateMetadata({ params }: { params: { slug: string[] } }) {
+export function generateMetadata({ params }: { params: { slug?: string[] } }): Metadata {
   const page = getPage(params.slug);
 
-  if (page == null) return {};
+  if (page == null) notFound();
 
   return {
-    title: page.title,
-    description: page.description,
-  } satisfies Metadata;
+    title: page.data.title,
+    description: page.data.description,
+  };
 }
+
+export const dynamicParams = false;
