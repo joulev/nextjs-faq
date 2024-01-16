@@ -39,26 +39,35 @@ export default async function Page({ params }: { params: { slug?: string[] } }) 
       footer={neighbour}
       tableOfContent={{
         header: (
-          <div className="grid grid-cols-3 text-sm gap-y-4 text-muted-foreground">
-            <div>Updated:</div>
-            <time dateTime={updatedISO} title={updatedISO} className="col-span-2 text-foreground">
-              {updatedHuman}
-            </time>
-            <div>Author{page.authors.length > 1 ? "s" : ""}:</div>
-            <div className="col-span-2 flex flex-col gap-2">
-              {page.authors.map(author => (
-                <SafeLink
-                  key={author}
-                  href={`https://github.com/${author}`}
-                  className="text-foreground transition-colors flex flex-row items-center gap-2 group"
-                >
-                  <img
-                    src={`https://github.com/${author}.png?size=16`}
-                    className="w-4 h-4 rounded-full border border-background group-hover:border-muted-foreground transition-colors"
-                  />
-                  <span className="flex-grow truncate">{author}</span>
-                </SafeLink>
-              ))}
+          <div className="flex flex-col gap-6">
+            <SafeLink
+              href="/"
+              className="bg-yellow-500/20 border-yellow-500 border rounded p-4 text-sm"
+            >
+              This site is a community collaboration of the Next.js Discord server members. This is{" "}
+              <strong>NOT</strong> an official Next.js website.
+            </SafeLink>
+            <div className="grid grid-cols-3 text-sm gap-y-4 text-muted-foreground">
+              <div>Updated:</div>
+              <time dateTime={updatedISO} title={updatedISO} className="col-span-2 text-foreground">
+                {updatedHuman}
+              </time>
+              <div>Author{page.authors.length > 1 ? "s" : ""}:</div>
+              <div className="col-span-2 flex flex-col gap-2">
+                {page.authors.map(author => (
+                  <SafeLink
+                    key={author}
+                    href={`https://github.com/${author}`}
+                    className="text-foreground transition-colors flex flex-row items-center gap-2 group"
+                  >
+                    <img
+                      src={`https://github.com/${author}.png?size=16`}
+                      className="w-4 h-4 rounded-full border border-background group-hover:border-muted-foreground transition-colors"
+                    />
+                    <span className="flex-grow truncate">{author}</span>
+                  </SafeLink>
+                ))}
+              </div>
             </div>
           </div>
         ),
