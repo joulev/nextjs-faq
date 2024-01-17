@@ -24,8 +24,6 @@ export const {
   getPages,
   pageTree: originalTree,
 } = loader({
-  baseUrl: "/",
-  rootDir: "docs",
   source: createMDXSource(map, { schema: { frontmatter: frontmatterSchema } }),
 });
 
