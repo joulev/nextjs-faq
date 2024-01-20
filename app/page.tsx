@@ -28,6 +28,10 @@ export default function Home() {
           <Link href={`${REPO}/pulls`}>make a pull request</Link>.
         </p>
         <p>
+          The content of the posts here are the opinions of the respective authors – and I am in
+          agreement with those opinions. Everything else is solely my own personal opinion.
+        </p>
+        <p>
           <Link href={REPO}>The content and all source code of this app</Link> are placed under{" "}
           <Link href="http://wiki.creativecommons.org/CC0">CC0</Link>. Attribution, though not
           required, is appreciated.

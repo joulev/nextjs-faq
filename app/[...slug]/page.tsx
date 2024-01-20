@@ -31,10 +31,15 @@ export default function Page({ params }: { params: { slug: string[] } }) {
       tableOfContent={{
         header: (
           <div className="flex flex-col gap-6">
-            <Link href="/" className="bg-secondary/50 rounded-lg border border-border p-4 text-sm">
-              This site is a community collaboration of the Next.js Discord server members. This is{" "}
-              <strong>NOT</strong> an official Next.js website.
-            </Link>
+            <div className="bg-secondary/50 rounded-lg border border-border p-4 text-sm">
+              This site is <strong>NOT</strong> an official Next.js or Vercel website.{" "}
+              <Link
+                href="/"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Learn more.
+              </Link>
+            </div>
             <div className="grid grid-cols-3 text-sm gap-y-4 text-muted-foreground">
               <div>Updated:</div>
               <time dateTime={updatedISO} title={updatedISO} className="col-span-2 text-foreground">
