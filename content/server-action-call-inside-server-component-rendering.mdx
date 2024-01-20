@@ -1,0 +1,63 @@
+---
+updated: 2024-01-20
+title: Would it be fine to call server actions during server commponent rendering?
+authors: [joulev]
+---
+
+> I have a server action (marked with `"use server"`). Would it be fine to call it during server component rendering (e.g. for setting cookies)? Would this work?
+>
+> ```tsx
+> "use server";
+> export async function rotateTokenAction() {
+>   const store = cookies();
+>   const token = store.get("token");
+>   const newToken = generateNewTokenFromOldToken(token);
+>   store.set("token", newToken);
+> }
+> ```
+>
+> ```tsx
+> export default async function Page() {
+>   await rotateTokenAction();
+>   return <div>Hello, world</div>;
+> }
+> ```
+
+**The code above does not work.**
+
+A server action executed during a server component render **does not act as a server action**. It will merely act as a simple JavaScript function. In the above example, `store.get("token")` works normally because you are allowed to read cookies during a server component render, but `store.set("token", newToken)` will not work because you are not allowed to set cookies during a server component rendering. So, the above example will **not** work.
+
+A function exported from a `"use server"` file only acts as a server action[^1] when it is called from a client interaction (i.e. triggered from the browser). It could be on a button click event, inside `useEffect`, or inside the `action`/`formAction` props.[^2] A server component render is not run on the browser, explaining why the function is not run as a server action.
+
+## Relevant questions
+
+### Why is it impossible to set cookies during a server component render?
+
+As you've seen above, `cookies().set()` does _not_ work during a server component render. In fact, it's impossible[^3] to set cookies that way due to streaming. The server cannot update the response status and headers once streaming has started, which prevents you from setting cookies because that would require updating the `Set-Cookie` header. Since server component rendering is streamed, you cannot set cookies (or set a custom header or set a custom status code) during a server component render.
+
+### How can I rotate tokens then?
+
+Use [middleware](https://nextjs.org/docs/app/building-your-application/routing/middleware) instead. It allows you to [read and set cookies both in the request and in the response](https://nextjs.org/docs/app/building-your-application/routing/middleware#using-cookies). So you can do something like
+
+```ts
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+
+export function middleware(request: NextRequest) {
+  const token = request.cookies.get("token");
+  const newToken = generateNewTokenFromOldToken(token);
+  const response = NextResponse.next();
+  response.cookies.set("token", newToken);
+  return response;
+}
+```
+
+Beware though that
+
+1. Middleware is run on every request. Use a [matcher](https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher) or [conditional statements](https://nextjs.org/docs/app/building-your-application/routing/middleware#conditional-statements) if that is not what you want.
+
+2. Middleware runs on the [edge runtime](https://nextjs.org/docs/app/building-your-application/rendering/edge-and-nodejs-runtimes), which is a restricted server-side runtime. Not all Node.js APIs are available. So you'll need `generateNewTokenFromOldToken` to be compatible with the edge runtime.
+
+[^1]: In other words, things like `cookies().set()` or `revalidatePath()` would work normally inside that function.
+[^2]: Although `action`/`formAction` props are supported in server component, after the client-side React tree has been loaded they will be converted to client-side interactivity similar to the `onSubmit` prop.
+[^3]: Technically, if you call `cookies().set()` before the first `Suspense` boundary, it would be theoretically possible to know the new cookies before streaming starts, so that `cookies().set()` would work. However this is just a not-very-helpful special case and to my knowledge I don't think Next.js supports this edge case yet.
