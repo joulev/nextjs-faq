@@ -27,12 +27,18 @@ export const {
   source: createMDXSource(map, { schema: { frontmatter: frontmatterSchema } }),
 });
 
-const offTopic = ["/non-nextjs-questions", "/good-question", "/minimal-reproduction-repository"];
+const offTopic = [
+  "/non-nextjs-questions",
+  "/on-general-being-removed",
+  "/good-question",
+  "/minimal-reproduction-repository",
+];
 export const pageTree: PageTree.Root = {
   name: "Docs",
   children: [
     { type: "separator", name: "Discord-specific" },
     { type: "page", name: "Non-Next.js Questions", url: "/non-nextjs-questions" },
+    { type: "page", name: "About the removal of #general", url: "/on-general-being-removed" },
     { type: "page", name: "How to ask a good question", url: "/good-question" },
     {
       type: "page",
