@@ -68,7 +68,7 @@ export default function Page({ params }: { params: { slug: string[] } }) {
           <div className="flex flex-col gap-2 justify-start text-sm text-muted-foreground">
             <Link
               className="hover:text-foreground transition-colors"
-              href={`https://github.com/joulev/nextjs-faq/blob/main/content/docs${page.url}.mdx`}
+              href={`https://github.com/joulev/nextjs-faq/blob/main/content${page.url}.mdx`}
             >
               <PenLine className="inline size-4 mr-2" />
               Edit this page
