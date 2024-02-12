@@ -2,6 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.prose :where(ul):not(:where([class~="not-prose"],[class~="not-prose"] *)) {
-    list-style-position: initial;
+.prose :where(ul):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  list-style-position: initial;
 }

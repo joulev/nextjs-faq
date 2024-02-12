@@ -47,6 +47,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               { url: "https://nextjs-forum.com", text: "nextjs-forum.com" },
             ]}
             nav={{
+              title: "Next.js Discord Server",
               links: [
                 {
                   label: "Github",
