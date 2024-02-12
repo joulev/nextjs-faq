@@ -37,7 +37,7 @@ export default function Home() {
           required, is appreciated.
         </p>
         <p>
-          Built with <Link href="https://github.com/SonMooSans/fumadocs">Fumadocs</Link>.
+          Built with <Link href="https://github.com/fuma-nama/fumadocs">Fumadocs</Link>.
         </p>
       </DocsBody>
     </DocsPage>
