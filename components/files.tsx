@@ -52,7 +52,7 @@ export function Folder({ title, defaultOpen = true, children }: FolderProps): JS
         {open ? <FolderOpenIcon /> : <FolderIcon />}
         {title}
       </button>
-      <div className={open ? "ml-4 flex flex-col border-l pl-2 pt-2" : "hidden"}>{children}</div>
+      <div className={open ? "ml-2 flex flex-col border-l pl-2" : "hidden"}>{children}</div>
     </div>
   );
 }

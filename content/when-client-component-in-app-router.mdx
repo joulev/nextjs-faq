@@ -19,7 +19,7 @@ Do note that when a component X is imported to a client component Y, X is render
 
 In the following example
 
-```tsx
+```tsx title="client-component.tsx"
 "use client";
 import ServerComponent from "./server-component";
 
@@ -34,7 +34,7 @@ export default function ClientComponent() {
 
 `ServerComponent` is rendered as a client component, but in the following example
 
-```tsx
+```tsx title="client-component.tsx"
 "use client";
 
 export default function ClientComponent({ children }: { children: React.ReactNode }) {
@@ -42,7 +42,7 @@ export default function ClientComponent({ children }: { children: React.ReactNod
 }
 ```
 
-```tsx
+```tsx title="another-server-component.tsx"
 import ClientComponent from "./client-component";
 import ServerComponent from "./server-component";
 

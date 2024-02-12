@@ -39,7 +39,7 @@ As you've seen above, `cookies().set()` does _not_ work during a server componen
 
 Use [middleware](https://nextjs.org/docs/app/building-your-application/routing/middleware) instead. It allows you to [read and set cookies both in the request and in the response](https://nextjs.org/docs/app/building-your-application/routing/middleware#using-cookies). So you can do something like
 
-```ts
+```ts title="middleware.ts"
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
