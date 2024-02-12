@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { DocsPage, DocsBody } from "next-docs-ui/page";
+import { DocsPage, DocsBody } from "fumadocs-ui/page";
 import Link from "next/link";
 
 const REPO = "https://github.com/joulev/nextjs-faq";
@@ -37,7 +37,7 @@ export default function Home() {
           required, is appreciated.
         </p>
         <p>
-          Built with <Link href="https://github.com/SonMooSans/next-docs">next-docs</Link>.
+          Built with <Link href="https://github.com/SonMooSans/fumadocs">Fumadocs</Link>.
         </p>
       </DocsBody>
     </DocsPage>

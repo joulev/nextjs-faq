@@ -2,9 +2,8 @@ import "./global.css";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import { Metadata } from "next";
-import { RootProvider } from "next-docs-ui/provider";
-import { DocsLayout } from "next-docs-ui/layout";
-import { Nav } from "next-docs-ui/nav";
+import { RootProvider } from "fumadocs-ui/provider";
+import { DocsLayout } from "fumadocs-ui/layout";
 import { pageTree } from "./source";
 
 // From Lucide icons
@@ -39,40 +38,29 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       className={`${GeistSans.variable} ${GeistMono.variable} font-sans [&_code]:font-mono [&_code]:not-italic [&_code]:font-normal`}
     >
       <body>
+        <div className="bg-secondary py-2 font-semibold text-center">Ceasefire now! 🕊️🇵🇸</div>
         <RootProvider>
           <DocsLayout
             tree={pageTree}
+            links={[
+              { url: "/", text: "About this site" },
+              { url: "https://nextjs-forum.com", text: "nextjs-forum.com" },
+            ]}
             nav={{
-              component: (
-                <>
-                  <div className="bg-secondary py-2 font-semibold text-center">
-                    Ceasefire now! 🕊️🇵🇸
-                  </div>
-                  <Nav
-                    title={<>FAQ for the Next.js Discord&nbsp;server</>}
-                    enableSidebar
-                    collapsibleSidebar={false}
-                    items={[
-                      { url: "/", text: "About this site" },
-                      { url: "https://nextjs-forum.com", text: "nextjs-forum.com" },
-                    ]}
-                    links={[
-                      {
-                        label: "Github",
-                        icon: <GitHub className="size-5" />,
-                        href: "https://github.com/joulev/nextjs-faq",
-                        external: true,
-                      },
-                      {
-                        label: "Discord",
-                        icon: <Discord className="size-5" />,
-                        href: "https://discord.gg/nextjs",
-                        external: true,
-                      },
-                    ]}
-                  />
-                </>
-              ),
+              links: [
+                {
+                  label: "Github",
+                  icon: <GitHub className="size-5" />,
+                  href: "https://github.com/joulev/nextjs-faq",
+                  external: true,
+                },
+                {
+                  label: "Discord",
+                  icon: <Discord className="size-5" />,
+                  href: "https://discord.gg/nextjs",
+                  external: true,
+                },
+              ],
             }}
           >
             {children}
