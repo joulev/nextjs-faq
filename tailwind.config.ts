@@ -16,5 +16,5 @@ export default {
       mono: ["var(--font-geist-mono)", ...defaultTheme.fontFamily.mono],
     },
   },
-  presets: [createPreset()],
+  presets: [createPreset({ preset: "ocean" })],
 } satisfies Config;
