@@ -1,6 +1,6 @@
 import { getPage, getPages } from "@/app/source";
 import type { Metadata } from "next";
-import { DocsPage, DocsBody } from "next-docs-ui/page";
+import { DocsPage, DocsBody } from "fumadocs-ui/page";
 import { notFound } from "next/navigation";
 import { CopyButton } from "./copy-button";
 import Link from "next/link";

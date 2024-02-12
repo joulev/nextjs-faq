@@ -1,6 +1,6 @@
 import { Config } from "tailwindcss";
 import defaultTheme from "tailwindcss/defaultTheme";
-import { docsUi, docsUiPlugins } from "next-docs-ui/tailwind-plugin";
+import { createPreset } from "fumadocs-ui/tailwind-plugin";
 
 export default {
   content: [
@@ -8,7 +8,7 @@ export default {
     "./app/**/*.{ts,tsx}",
     "./content/**/*.{md,mdx}",
     "./mdx-components.{ts,tsx}",
-    "./node_modules/next-docs-ui/dist/**/*.js",
+    "./node_modules/fumadocs-ui/dist/**/*.js",
   ],
   theme: {
     fontFamily: {
@@ -16,5 +16,5 @@ export default {
       mono: ["var(--font-geist-mono)", ...defaultTheme.fontFamily.mono],
     },
   },
-  plugins: [...docsUiPlugins, docsUi],
+  presets: [createPreset()],
 } satisfies Config;

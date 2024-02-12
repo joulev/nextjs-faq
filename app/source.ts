@@ -1,7 +1,7 @@
 import { map } from "@/.map";
-import { createMDXSource, defaultSchemas } from "next-docs-mdx";
-import { loader } from "next-docs-zeta/source";
-import { PageTree } from "next-docs-zeta/server";
+import { createMDXSource, defaultSchemas } from "fumadocs-mdx";
+import { loader } from "fumadocs-core/source";
+import { PageTree } from "fumadocs-core/server";
 import { z } from "zod";
 
 const frontmatterSchema = defaultSchemas.frontmatter.extend({
