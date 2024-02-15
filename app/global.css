@@ -4,4 +4,9 @@
 
 .prose :where(ul):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
   list-style-position: initial;
+  padding-left: 1.625em;
+}
+
+.prose :where(ul > li):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  padding-left: 0.375em;
 }
