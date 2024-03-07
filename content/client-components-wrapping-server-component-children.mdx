@@ -1,0 +1,184 @@
+---
+updated: 2024-03-08
+title: Client components wrapping server component children in layout files
+authors: [joulev]
+---
+
+> If I wrap my `children` in `layout.tsx` files inside a context provider or any client components, does that make everything under the layout client-side rendered too?
+
+## No.
+
+The short answer is no. `children` of client components can be server components and that's perfectly fine.
+
+## Why?
+
+Let's think of it this way. Say you have a client component rendering a name string
+
+```tsx
+function ClientComponent({ name }: { name: string }) {
+  return <div>Hello, {name}!</div>;
+}
+```
+
+In a server component, you call it like so
+
+```tsx
+async function ServerComponent() {
+  const user = await getUser();
+  return <ClientComponent name={name} />;
+}
+```
+
+It should work perfectly fine right? This is just passing data from the server to be rendered in a reactive client component. Nothing special.
+
+What if we want to render the name inside a fancy `span` where you check if the user's birthday is today – if yes, you render a birthday cake too. Who doesn't want a cake on their birthday? You can simply check it in another server component and pass it to the client component like so
+
+```tsx
+async function BirthdayCake() {
+  const userBirthdayIsToday = await checkIfBirthdayIsToday();
+  return userBirthdayIsToday ? <span>🎂</span> : null;
+}
+
+async function ServerComponent() {
+  const user = await getUser();
+  // [!code word:birthdayCake]
+  return <ClientComponent name={name} birthdayCake={<BirthdayCake />} />;
+}
+```
+
+```tsx
+"use client";
+
+// [!code word:birthdayCake]
+function ClientComponent({ name, birthdayCake }: { name: string; birthdayCake: React.ReactNode }) {
+  return (
+    <div>
+      Hello, {name}! {birthdayCake}
+    </div>
+  );
+}
+```
+
+It still makes perfect sense right? The `birthdayCake` is rendered on the server and the result is passed to the client, just like how the result of `getUser` is passed to the client. You are just passing a React component instead of a string – React allows both (and [some more data types](https://react.dev/reference/react/use-client#serializable-types)) to be passed from server components to client components.
+
+`BirthdayCake` is still rendered as a server component, and your database credentials used during `checkIfBirthdayIsToday` are still perfectly safe. Since server components are not rerendered, as far as `ClientComponent` is concerned, our `BirthdayCake` is just static HTML, either an empty component or a span wrapping a cake emoji.
+
+Now, React obviously doesn't care what your prop name is, it could be `birthdayCake`, it could be [`bunCaIsSoDelicious`](https://www.google.com/search?q=bun+ca&tbm=isch), could be anything. It could be named `children` too:
+
+```tsx
+async function BirthdayCake() {
+  const userBirthdayIsToday = await checkIfBirthdayIsToday();
+  return userBirthdayIsToday ? <span>🎂</span> : null;
+}
+
+async function ServerComponent() {
+  const user = await getUser();
+  // [!code word:children]
+  return <ClientComponent name={name} children={<BirthdayCake />} />;
+}
+```
+
+```tsx
+"use client";
+
+// [!code word:children]
+function ClientComponent({ name, children }: { name: string; children: React.ReactNode }) {
+  return (
+    <div>
+      Hello, {name}! {children}
+    </div>
+  );
+}
+```
+
+This should still work exactly the same way as the `birthdayCake` example above – after all, we just renamed the prop and did nothing else. So `BirthdayCake` is still rendered exclusively on the server as a server component, and `ClientComponent` only sees the static HTML that is the output of that server component.
+
+Well, React happens to have special treatment for the `children` prop on the JSX side. As it turns out, the following methods are equivalent, although it's pretty obvious from common usage that the second way is a _lot_ more frequently used.
+
+```tsx
+// First way
+<Component children={<Children />} />
+
+// Second way
+<Component>
+  <Children />
+</Component>
+```
+
+So we can rewrite our `ServerComponent` to
+
+```tsx
+async function ServerComponent() {
+  const user = await getUser();
+  return (
+    <ClientComponent name={name}>
+      <BirthdayCake /> // [!code highlight]
+    </ClientComponent>
+  );
+}
+```
+
+and as shown above, despite the fact that `ClientComponent` is a client component, our `BirthdayCake` still functions perfectly fine as a server component.
+
+Now back to the original question, you will notice that your layout file is very similar to the `ServerComponent` above. A simplified version of your layout file probably looks like this:
+
+```tsx
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return <SomeClientProvider>{children}</SomeClientProvider>;
+}
+```
+
+And yes, it behaves the same way. In other words, `children` continues to behave like server components by default without problems, and you don't have to worry about `SomeClientProvider` opting your entire app to client side rendering because that doesn't happen.
+
+Even if your layout is marked as a client component, it doesn't make the `children` client-side rendered. Your layout only "forwards" the `children` prop from an upper component
+
+```tsx
+// Somewhere in the Next.js source code, they have something that looks like this
+import Layout from "./user-provided-layout-file";
+
+<Layout>{computedPages}</Layout>;
+```
+
+which, once again, looks exactly like the `ClientComponent` example above. `computedPages` is still rendered as server components by default. So no, making a layout file `use client` does not opt the entire tree into client side rendering, so no need to worry about that.
+
+## Some more advanced notes
+
+It may be helpful to note that page files and layout files in the `app` router are evaluated independently of each other. Which means whatever you do in your layout file does not affect the page file at all[^1] and vice versa. This also explains why you cannot pass data between your layouts and your pages on the server, and instead you have to run the same query in both the layout and the page. (Remember to [use `React.cache`](https://nextjs.org/docs/app/building-your-application/caching#react-cache-function) [if needed](https://nextjs.org/docs/app/building-your-application/caching#request-memoization), to ensure your query is actually only run once.)
+
+[^1]: Well, depending on how the app is hosted, I guess you could technically do some global singleton shenanigans to share data across all files including layouts and pages, but I wouldn't recommend that. How does that differ from `React.cache` anyway?
+
+```tsx title="layout.tsx"
+export default async function Layout({ children }: { children: React.ReactNode }) {
+  const user = await getUser(); // [!code highlight]
+  return <div>{children}</div>;
+}
+```
+
+```tsx title="page.tsx"
+export default async function Page() {
+  // There is no way to get the `user` above in server components.
+  // You have to rerun the query:
+  const user = await getUser(); // [!code highlight]
+  return <div>{user.name}</div>;
+}
+```
+
+Of course, client side contexts still work, but you can only send and receive context data in client components, not server components.
+
+```tsx title="layout.tsx"
+export default async function Layout({ children }: { children: React.ReactNode }) {
+  const user = await getUser();
+  return <UserProvider user={user}>{children}</UserProvider>; // [!code highlight]
+}
+```
+
+```tsx title="username.tsx"
+"use client";
+
+function UserName() {
+  const user = useContext(UserContext); // [!code highlight]
+  return <div>{user.name}</div>;
+}
+```
+
+Hence, your layout file could be marked with `"use client"`, and all page files under it would still not care, because they are independent from the layout file. They just happen to be wrapped by the HTML elements in the layout file, when React finishes computing everything and produces the HTML tree of the page.
