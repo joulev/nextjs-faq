@@ -1,0 +1,159 @@
+---
+updated: 2024-06-15
+title: "Why doesn't my route handler work, when it follows the pages router syntax?"
+authors: [joulev]
+---
+
+> I have a route handler at `app/.../route.js` that looks like this,
+>
+> ```tsx
+> export function POST(req, res) {
+>   const { name } = req.body;
+>   res.json({ message: `Hello, ${name}` });
+> }
+> ```
+>
+> But it doesn't work. Why?
+
+The syntax used in the `pages` router API routes (the syntax that you used) and the syntax used in the `app` router route handlers are entirely different.
+
+This is important, so I have to repeat it again.
+
+**The syntax used in the `pages` router API routes (the syntax that you used) and the syntax used in the `app` router route handlers are entirely different.**
+
+If you want to use route handlers in the `app` router, you need to migrate your code to the new syntax. Check the [official documentation](https://nextjs.org/docs/app/building-your-application/routing/route-handlers) for detailed information. Summarised below are some of the major differences that I have seen many people confused about.
+
+## You now export named functions instead of a generic handler
+
+In the `app` router, you no longer `export default function handler()` which handles all HTTP methods. You now export named functions for each HTTP method you want to handle.
+
+For example, if you want to support `POST` and `PUT` methods, you would export two functions, `POST` and `PUT`.
+
+```tsx
+// Don't do this, it doesn't work
+// export default function handler() {}
+
+// Instead do this
+export function POST() {
+  // Handle POST requests
+}
+
+export function PUT() {
+  // Handle PUT requests
+}
+```
+
+and all other methods will get a `405 Method Not Allowed` response. In the example above, `GET`, `DELETE`, `PATCH`, etc., will all get a `405` response.
+
+If you want to use the same function for more than one method, you can do so by exporting the same function for multiple methods. This technique is used in some places, such as [`next-auth`](https://authjs.dev/getting-started/installation#configure).
+
+```tsx
+function handlePostAndPut() {
+  // Handle POST and PUT requests
+}
+
+export { handlePostAndPut as POST, handlePostAndPut as PUT };
+```
+
+## The function signature is different
+
+It is no longer `(req, res)`. It is just `(req)` now.[^1]
+
+[^1]: Well, to be more precise, it is `(req, ctx)`, with the context parameter used to get the dynamic segment params value. You can check the [documentation](https://nextjs.org/docs/app/api-reference/file-conventions/route#context-optional) for more information.
+
+And the old `req` and the new `req` are nowhere near the same. Read on...
+
+## The types are different
+
+### Request
+
+The old `req` is based on the Node.js `http.IncomingMessage` type.[^2] That sounds like a lot of jargon, but basically speaking, it's the same `req` as the `req` you use in Express.js.
+
+[^2]: With a few extra things specific to Next.js. But we are not using the `pages` router here so it doesn't matter.
+
+The new `req` is based on the native `Request` type.[^3] Basically, the same `req` as you use in [middleware](https://nextjs.org/docs/app/building-your-application/routing/middleware) and the browser's Fetch API.
+
+[^3]: With a few extra things specific to Next.js. Refer to the [documentation of `NextRequest`](https://nextjs.org/docs/app/api-reference/functions/next-request) for more information.
+
+This means there are a few differences:
+
+|  | Old `req` | New `req` |
+| --- | --- | --- |
+| Read JSON body[^4] | `req.body` | `await req.json()`[^5] |
+| Read string body | `req.body`<br />([`bodyParser` disabled](https://nextjs.org/docs/pages/building-your-application/routing/api-routes#custom-config)) | `await req.text()`[^6] |
+| Read `FormData` body | Third party packages<br />such as [`multer`](https://github.com/expressjs/multer) | `await req.formData()` |
+| Read HTTP headers | `req.headers.authorization` | `req.headers.get("authorization")`<br />or use [`headers()`](https://nextjs.org/docs/app/api-reference/functions/headers) |
+| Read cookies | `req.cookies` | `req.cookies.get("cookieName")`<br />or use [`cookies()`](https://nextjs.org/docs/app/api-reference/functions/cookies) |
+| Read HTTP method | `req.method` | `req.method`<br />though do you need it? |
+| Read the<br />request pathname | I don't remember 🥲,[^7]<br />maybe `req.url` | `req.nextUrl.pathname` |
+| Read dynamic<br />segment parameters | `req.query` | The [context](https://nextjs.org/docs/app/api-reference/file-conventions/route#context-optional) parameter |
+| Read search parameters<br />(query values) | I don't remember 🥲,<br />maybe `req.query` | `req.nextUrl.searchParams` |
+
+[^4]: Note that some HTTP methods, such as `GET`, don't have a body.
+[^5]: Does it look familiar? Yesss! You do `await res.json()` after you `fetch` something in the browser. It's the same syntax here.
+[^6]: By the way, you can get string response in the browser with `await res.text()` too. Now you know.
+[^7]: Sorry, haven't used the `pages` router or Express.js for a long time.
+
+### Response
+
+The old `res` is based on the Node.js `http.ServerResponse` type. It's the same `res` as the `res` you use in Express.js.
+
+Now you no longer have a `res` parameter. Instead, you return a response object. The response object is based on the native `Response` type. It's the same `res` as you use in the browser's Fetch API.
+
+Hence, there are also a few differences:
+
+|  | Old `res` | New method |
+| --- | --- | --- |
+| Send JSON response | `res.json({ message: "Hello, world" })` | `return Response.json({ message: "Hello, world" })` |
+| Send string response | `res.send("Hello, world")` | `return new Response("Hello, world")` |
+| Set status code | `res.status(403)` | `return new Response(..., { status: 403 })`<br />`return Response.json({...}, { status: 403 })` |
+| Set headers | `res.setHeader("x-hello", "world")` | `return new Response(..., { headers: { "x-hello": "world" } })`<br />`return Response.json({...}, { headers: { "x-hello": "world" } })`[^8] |
+| Set cookies | `res.cookie("cookieName", "cookieValue")` | [`cookies().set("cookieName", "cookieValue")`](https://nextjs.org/docs/app/api-reference/functions/cookies) |
+| Redirect | `res.redirect(...)` | `return Response.redirect(...)` or [`redirect()`](https://nextjs.org/docs/app/building-your-application/routing/redirecting#redirect-function) |
+
+[^8]: Note that `Response.json` automatically sets the `Content-Type` header to `application/json`, so you don't need to do that again.
+
+## Conclusion
+
+As you can see, there are so many differences between the old and new syntax. It's not just a matter of changing the function signature. You have to change the way you read the request body, the way you send the response, and even the way you set headers and cookies.
+
+So don't expect that you can simply move your files from `pages/api` to `app` and everything will work. Quite likely, it won't.
+
+So time to migrate the code to the new syntax. Or just keep using the `pages` router, it still works fine and is still supported.
+
+Good luck.
+
+```ts title="Before"
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method !== "POST") return res.status(405).json({ error: "Method Not Allowed" });
+
+  const result = validate(req.body, schema);
+  if (!result.success) return res.status(400).json({ error: result.error });
+
+  const { email, password } = req.body;
+  const user = await getUserByEmail(email);
+  if (!user || !checkPassword(user, password))
+    return res.status(401).json({ error: "Invalid email or password" });
+
+  const token = createToken(user);
+  res.cookie("token", token, { httpOnly: true });
+  return res.status(200).end();
+}
+```
+
+```ts title="After"
+export function POST(req: NextRequest) {
+  const body = await req.json();
+  const result = validate(body, schema);
+  if (!result.success) return Response.json({ error: result.error }, { status: 400 });
+
+  const { email, password } = body;
+  const user = await getUserByEmail(email);
+  if (!user || !checkPassword(user, password))
+    return Response.json({ error: "Invalid email or password" }, { status: 401 });
+
+  const token = createToken(user);
+  cookies().set("token", token, { httpOnly: true });
+  return new Response(null);
+}
+```
