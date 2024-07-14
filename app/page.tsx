@@ -1,13 +1,25 @@
 import { Metadata } from "next";
 import { DocsPage, DocsBody } from "fumadocs-ui/page";
 import Link from "next/link";
+import Image from "next/image";
+import { NotVercel } from "@/components/not-vercel";
+import image from "./opengraph-image.png";
 
 const REPO = "https://github.com/joulev/nextjs-faq";
 
 export default function Home() {
   return (
-    <DocsPage>
+    <DocsPage
+      tableOfContent={{
+        header: (
+          <div className="flex flex-col gap-6 mb-6">
+            <NotVercel />
+          </div>
+        ),
+      }}
+    >
       <DocsBody>
+        <Image src={image} alt="Site banner" />
         <p>
           I am <Link href="https://github.com/joulev">@joulev</Link>, a Next.js user, an active
           helper and moderator on the{" "}

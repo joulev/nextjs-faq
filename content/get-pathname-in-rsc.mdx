@@ -4,7 +4,7 @@ title: Get pathname in server components
 authors: [joulev]
 ---
 
-import { File, Folder, Files } from "../components/files";
+import { File, Folder, Files } from "fumadocs-ui/components/files";
 
 > In client components, `usePathname` is available to get the current pathname. However, in server components, there is no such API. How do I get the pathname in server components?
 
@@ -15,12 +15,12 @@ Do note though, as you might have already noticed, that it does not work everywh
 However, if you use it in a layout component, the pathname cannot be reliably determined. Since a layout is not recomputed when you navigate to a different page, it's only possible to get the pathname until that layout file; the pathname from that layout file onwards cannot be determined. In other words, if you have something like this
 
 <Files>
-  <Folder title="app" >
-    <Folder title="users" >
-      <Folder title="[userId]" >
-        <File title="layout.tsx" />
-        <Folder title="[appId]" >
-          <File title="page.tsx" />
+  <Folder name="app" defaultOpen>
+    <Folder name="users" defaultOpen>
+      <Folder name="[userId]" defaultOpen>
+        <File name="layout.tsx" />
+        <Folder name="[appId]" defaultOpen>
+          <File name="page.tsx" />
         </Folder>
       </Folder>
     </Folder>

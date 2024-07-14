@@ -11,10 +11,11 @@ export default {
     "./node_modules/fumadocs-ui/dist/**/*.js",
   ],
   theme: {
-    fontFamily: {
-      sans: ["var(--font-geist-sans)", ...defaultTheme.fontFamily.sans],
-      mono: ["var(--font-geist-mono)", ...defaultTheme.fontFamily.mono],
+    extend: {
+      fontFamily: {
+        sans: ["var(--font-sans)", ...defaultTheme.fontFamily.sans],
+      },
     },
   },
-  presets: [createPreset({ preset: "ocean" })],
+  presets: [createPreset({ preset: "catppuccin" })],
 } satisfies Config;

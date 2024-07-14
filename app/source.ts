@@ -36,6 +36,7 @@ const offTopic = [
 export const pageTree: PageTree.Root = {
   name: "Docs",
   children: [
+    { type: "page", name: "About this site", url: "/" },
     { type: "separator", name: "Discord-specific" },
     { type: "page", name: "Non-Next.js Questions", url: "/non-nextjs-questions" },
     { type: "page", name: "About the removal of #general", url: "/on-general-being-removed" },
@@ -46,8 +47,7 @@ export const pageTree: PageTree.Root = {
       url: "/minimal-reproduction-repository",
     },
     { type: "separator", name: "Questions" },
-    ...originalTree.children
-      .filter(node => node.type !== "page" || !offTopic.includes(node.url))
-      .sort((a, b) => a.name.localeCompare(b.name)),
+    ...originalTree.children.filter(node => node.type !== "page" || !offTopic.includes(node.url)),
+    // .sort((a, b) => a.name.localeCompare(b.name)),
   ],
 };

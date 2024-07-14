@@ -2,9 +2,10 @@ import { getPage, getPages } from "@/app/source";
 import type { Metadata } from "next";
 import { DocsPage, DocsBody } from "fumadocs-ui/page";
 import { notFound } from "next/navigation";
-import { CopyButton } from "./copy-button";
 import Link from "next/link";
 import { PenLine } from "lucide-react";
+import { NotVercel } from "@/components/not-vercel";
+import { CopyButton } from "./copy-button";
 
 function formatDate(date: Date) {
   const formatter = new Intl.DateTimeFormat("en-GB", {
@@ -28,18 +29,11 @@ export default function Page({ params }: { params: { slug: string[] } }) {
   return (
     <DocsPage
       toc={page.data.exports.toc}
+      full={page.data.full}
       tableOfContent={{
         header: (
-          <div className="flex flex-col gap-6">
-            <div className="bg-secondary/50 rounded-lg border border-border p-4 text-sm">
-              This site is <strong>NOT</strong> an official Next.js or Vercel website.{" "}
-              <Link
-                href="/"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Learn more.
-              </Link>
-            </div>
+          <div className="flex flex-col gap-6 mb-6">
+            <NotVercel />
             <div className="grid grid-cols-3 text-sm gap-y-4 text-muted-foreground">
               <div>Updated:</div>
               <time dateTime={updatedISO} title={updatedISO} className="col-span-2 text-foreground">
@@ -65,7 +59,7 @@ export default function Page({ params }: { params: { slug: string[] } }) {
           </div>
         ),
         footer: (
-          <div className="flex flex-col gap-2 justify-start text-sm text-muted-foreground">
+          <div className="flex flex-col gap-2 justify-start text-sm text-muted-foreground mt-6">
             <Link
               className="hover:text-foreground transition-colors"
               href={`https://github.com/joulev/nextjs-faq/blob/main/content${page.url}.mdx`}
