@@ -25,7 +25,7 @@ If you want to use route handlers in the `app` router, you need to migrate your 
 
 ## You now export named functions instead of a generic handler
 
-In the `app` router, you no longer `export default function handler()` which handles all HTTP methods. You now export named functions for each HTTP method you want to handle.
+In the `app` router, you no longer `export default function handler(){:ts}` which handles all HTTP methods. You now export named functions for each HTTP method you want to handle.
 
 For example, if you want to support `POST` and `PUT` methods, you would export two functions, `POST` and `PUT`.
 
@@ -79,19 +79,22 @@ This means there are a few differences:
 
 |  | Old `req` | New `req` |
 | --- | --- | --- |
-| Read JSON body[^4] | `req.body` | `await req.json()`[^5] |
-| Read string body | `req.body`<br />([`bodyParser` disabled](https://nextjs.org/docs/pages/building-your-application/routing/api-routes#custom-config)) | `await req.text()`[^6] |
-| Read `FormData` body | Third party packages<br />such as [`multer`](https://github.com/expressjs/multer) | `await req.formData()` |
-| Read HTTP headers | `req.headers.authorization` | `req.headers.get("authorization")`<br />or use [`headers()`](https://nextjs.org/docs/app/api-reference/functions/headers) |
-| Read cookies | `req.cookies` | `req.cookies.get("cookieName")`<br />or use [`cookies()`](https://nextjs.org/docs/app/api-reference/functions/cookies) |
-| Read HTTP method | `req.method` | `req.method`<br />though do you need it? |
-| Read the<br />request pathname | I don't remember 🥲,[^7]<br />maybe `req.url` | `req.nextUrl.pathname` |
-| Read dynamic<br />segment parameters | `req.query` | The [context](https://nextjs.org/docs/app/api-reference/file-conventions/route#context-optional) parameter |
-| Read search parameters<br />(query values) | I don't remember 🥲,<br />maybe `req.query` | `req.nextUrl.searchParams` |
+| Read JSON body[^4] | `req.body{:ts}` | `await req.json(){:ts}`[^5] |
+| Read string body | `req.body{:ts}`<br />([`bodyParser` disabled](https://nextjs.org/docs/pages/building-your-application/routing/api-routes#custom-config)) | `await req.text(){:ts}`[^6] |
+| Read `FormData` body | Third party packages<br />such as [`multer`](https://github.com/expressjs/multer) | `await req.formData(){:ts}` |
+| Read HTTP headers | `req.headers.authorization{:ts}` | `req.headers.get("authorization"){:ts}`<br />or use [`headers(){:ts}`](https://nextjs.org/docs/app/api-reference/functions/headers) |
+| Read cookies | `req.cookies{:ts}` | `req.cookies.get("cookieName"){:ts}`<br />or use [`cookies(){:ts}`](https://nextjs.org/docs/app/api-reference/functions/cookies) |
+| Read HTTP method | `req.method{:ts}` | `req.method{:ts}`<br />though do you need it? |
+| Read the<br />request pathname | I don't remember 🥲,[^7]<br />maybe `req.url{:ts}` | `req.nextUrl.pathname{:ts}` |
+| Read dynamic<br />segment parameters | `req.query{:ts}` | The [context](https://nextjs.org/docs/app/api-reference/file-conventions/route#context-optional) parameter |
+| Read search parameters<br />(query values) | I don't remember 🥲,<br />maybe `req.query{:ts}` | `req.nextUrl.searchParams{:ts}` |
 
 [^4]: Note that some HTTP methods, such as `GET`, don't have a body.
-[^5]: Does it look familiar? Yesss! You do `await res.json()` after you `fetch` something in the browser. It's the same syntax here.
-[^6]: By the way, you can get string response in the browser with `await res.text()` too. Now you know.
+
+[^5]: Does it look familiar? Yesss! You do `await res.json(){:ts}` after you `fetch` something in the browser. It's the same syntax here.
+
+[^6]: By the way, you can get string response in the browser with `await res.text(){:ts}` too. Now you know.
+
 [^7]: Sorry, haven't used the `pages` router or Express.js for a long time.
 
 ### Response
@@ -104,12 +107,12 @@ Hence, there are also a few differences:
 
 |  | Old `res` | New method |
 | --- | --- | --- |
-| Send JSON response | `res.json({ message: "Hello, world" })` | `return Response.json({ message: "Hello, world" })` |
-| Send string response | `res.send("Hello, world")` | `return new Response("Hello, world")` |
-| Set status code | `res.status(403)` | `return new Response(..., { status: 403 })`<br />`return Response.json({...}, { status: 403 })` |
-| Set headers | `res.setHeader("x-hello", "world")` | `return new Response(..., { headers: { "x-hello": "world" } })`<br />`return Response.json({...}, { headers: { "x-hello": "world" } })`[^8] |
-| Set cookies | `res.cookie("cookieName", "cookieValue")` | [`cookies().set("cookieName", "cookieValue")`](https://nextjs.org/docs/app/api-reference/functions/cookies) |
-| Redirect | `res.redirect(...)` | `return Response.redirect(...)` or [`redirect()`](https://nextjs.org/docs/app/building-your-application/routing/redirecting#redirect-function) |
+| Send JSON response | `res.json({ message: "Hello, world" }){:ts}` | `return Response.json({ message: "Hello, world" }){:ts}` |
+| Send string response | `res.send("Hello, world"){:ts}` | `return new Response("Hello, world"){:ts}` |
+| Set status code | `res.status(403){:ts}` | `return new Response(..., { status: 403 }){:ts}`<br />`return Response.json({...}, { status: 403 }){:ts}` |
+| Set headers | `res.setHeader("x-hello", "world"){:ts}` | `return new Response(..., { headers: { "x-hello": "world" } }){:ts}`<br />`return Response.json({...}, { headers: { "x-hello": "world" } }){:ts}`[^8] |
+| Set cookies | `res.cookie("cookieName", "cookieValue"){:ts}` | [`cookies().set("cookieName", "cookieValue"){:ts}`](https://nextjs.org/docs/app/api-reference/functions/cookies) |
+| Redirect | `res.redirect(...){:ts}` | `return Response.redirect(...){:ts}` or [`redirect(){:ts}`](https://nextjs.org/docs/app/building-your-application/routing/redirecting#redirect-function) |
 
 [^8]: Note that `Response.json` automatically sets the `Content-Type` header to `application/json`, so you don't need to do that again.
 

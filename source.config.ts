@@ -1,4 +1,4 @@
-import { defineDocs, frontmatterSchema } from "fumadocs-mdx/config";
+import { defineDocs, frontmatterSchema, getDefaultMDXOptions } from "fumadocs-mdx/config";
 import { z } from "zod";
 
 export const { docs, meta } = defineDocs({
@@ -17,6 +17,12 @@ export const { docs, meta } = defineDocs({
           }
         }),
       authors: z.array(z.string()),
+    }),
+    mdxOptions: getDefaultMDXOptions({
+      rehypeCodeOptions: {
+        inline: "tailing-curly-colon",
+        theme: "github-dark-default",
+      },
     }),
   },
 });
