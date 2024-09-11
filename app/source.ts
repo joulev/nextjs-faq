@@ -1,31 +1,14 @@
-import { map } from "@/.map";
-import { createMDXSource, defaultSchemas } from "fumadocs-mdx";
-import { loader } from "fumadocs-core/source";
 import { PageTree } from "fumadocs-core/server";
-import { z } from "zod";
 
-const frontmatterSchema = defaultSchemas.frontmatter.extend({
-  updated: z
-    .string()
-    .or(z.date())
-    .transform((value, context) => {
-      try {
-        return new Date(value);
-      } catch {
-        context.addIssue({ code: z.ZodIssueCode.custom, message: "Invalid date" });
-        return z.NEVER;
-      }
-    }),
-  authors: z.array(z.string()),
-});
+import { docs, meta } from "@/.source";
+import { createMDXSource } from "fumadocs-mdx";
+import { loader } from "fumadocs-core/source";
 
 export const {
   getPage,
   getPages,
   pageTree: originalTree,
-} = loader({
-  source: createMDXSource(map, { schema: { frontmatter: frontmatterSchema } }),
-});
+} = loader({ source: createMDXSource(docs, meta) });
 
 const offTopic = [
   "/non-nextjs-questions",

@@ -1,6 +1,7 @@
 import { getPage, getPages } from "@/app/source";
 import type { Metadata } from "next";
 import { DocsPage, DocsBody } from "fumadocs-ui/page";
+import { Pre, CodeBlock } from "fumadocs-ui/components/codeblock";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { PenLine } from "lucide-react";
@@ -24,13 +25,15 @@ export default function Page({ params }: { params: { slug: string[] } }) {
   const updated = new Date(page.data.updated);
   const [updatedISO, updatedHuman] = [updated.toISOString(), formatDate(updated)];
 
-  const MDX = page.data.exports.default;
+  const MDX = page.data.body;
 
   return (
     <DocsPage
-      toc={page.data.exports.toc}
+      toc={page.data.toc}
       full={page.data.full}
       tableOfContent={{
+        single: false,
+        style: "clerk",
         header: (
           <div className="flex flex-col gap-6 mb-6">
             <NotVercel />
@@ -84,7 +87,16 @@ export default function Page({ params }: { params: { slug: string[] } }) {
             <CopyButton className="hover:text-foreground transition-colors" />
           </div>
         </div>
-        <MDX />
+        <MDX
+          components={{
+            // HTML `ref` attribute conflicts with `forwardRef`
+            pre: ({ ref: _ref, ...props }) => (
+              <CodeBlock {...props}>
+                <Pre>{props.children}</Pre>
+              </CodeBlock>
+            ),
+          }}
+        />
       </DocsBody>
     </DocsPage>
   );

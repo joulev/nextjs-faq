@@ -17,5 +17,5 @@ export default {
       },
     },
   },
-  presets: [createPreset({ preset: "catppuccin" })],
+  presets: [createPreset({ preset: "vitepress", addGlobalColors: true })],
 } satisfies Config;

@@ -1,4 +1,4 @@
-import { type BaseLayoutProps, type DocsLayoutProps } from "fumadocs-ui/layout";
+import type { DocsLayoutProps } from "fumadocs-ui/layout";
 import { pageTree } from "@/app/source";
 
 // https://remixicon.com/icon/github-fill
@@ -19,7 +19,7 @@ function Discord({ className }: { className?: string }) {
   );
 }
 
-export const baseOptions: BaseLayoutProps = {
+export const baseOptions = {
   nav: {
     title: <>FAQ&nbsp;for&nbsp;the Next.js&nbsp;Discord&nbsp;Server</>,
   },
