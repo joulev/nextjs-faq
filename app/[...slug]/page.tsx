@@ -1,7 +1,7 @@
 import { getPage, getPages } from "@/app/source";
 import type { Metadata } from "next";
 import { DocsPage, DocsBody } from "fumadocs-ui/page";
-import { Pre, CodeBlock } from "fumadocs-ui/components/codeblock";
+import defaultMdxComponents from "fumadocs-ui/mdx";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { PenLine } from "lucide-react";
@@ -87,16 +87,7 @@ export default function Page({ params }: { params: { slug: string[] } }) {
             <CopyButton className="hover:text-foreground transition-colors" />
           </div>
         </div>
-        <MDX
-          components={{
-            // HTML `ref` attribute conflicts with `forwardRef`
-            pre: ({ ref: _ref, ...props }) => (
-              <CodeBlock {...props}>
-                <Pre>{props.children}</Pre>
-              </CodeBlock>
-            ),
-          }}
-        />
+        <MDX components={defaultMdxComponents} />
       </DocsBody>
     </DocsPage>
   );
