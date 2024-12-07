@@ -1,0 +1,27 @@
+---
+updated: 2024-12-03
+title: "Suggested authentication library"
+authors: [PhantomKnight287]
+---
+
+Authentication solutions vary based on your requirements and resources. If you need full control over user data, you might consider self-hosted options like [NextAuth (now Auth.js)](https://authjs.dev) or [Better Auth](https://better-auth.com). For those who prefer managed solutions, providers like [Clerk](https://clerk.com) or [Auth0](https://auth0.com) offer hosted alternatives.
+
+Handling sensitive user data, such as passwords, requires strict adherence to security best practices. Refer to the [OWASP Password Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html) to ensure secure implementation.
+
+### Authentication Solutions
+
+This section lists our suggested libraries/services that you can use to set up authentication in Next.js. The list is not exhaustive, and if you find a library you like that is not listed here, that library might be good as well. Play with the options you have and choose the one you think is a good fit for your codebase.
+
+#### Self-Hosted
+
+- [NextAuth (Auth.js)](https://authjs.dev)
+- [Better Auth](https://better-auth.com)
+- Build your own solution using guides like [Lucia Auth Documentation](https://lucia-auth.com/) or [Roll Your Own Auth](https://roll-your-own-auth.vercel.app/).
+
+#### Hosted
+
+- [Clerk](https://clerk.com)
+- [Auth0](https://auth0.com)
+- [Kinde](https://kinde.com/)
+- [Ory](https://ory.sh)
+- [Stack Auth](https://stack-auth.com/) (also offers a [self-hosted option](https://docs.stack-auth.com/others/self-host))

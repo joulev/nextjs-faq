@@ -1,0 +1,26 @@
+---
+updated: 2024-12-03
+title: "Hosting platforms"
+authors: [PhantomKnight287]
+---
+
+The ideal platform to host your Next.js application depends on your needs. [Vercel](https://vercel.com) is a popular choice for its seamless integration with Next.js, but there are other options available for different requirements. For alternative hosting setups, refer to [these official code examples](https://github.com/orgs/nextjs/repositories) to explore platforms like Render and Fly.io.
+
+<Callout type="warn">
+  Vercel or any other serverless hosting platform does not support long-running servers like
+  Socket.IO. For such use cases, consider hosting on serverful platforms like Render or Fly.io.
+</Callout>
+
+If you prefer to self-host, you can use a VPS with Docker. For setup guidance, refer to [official documentation](https://nextjs.org/docs/app/building-your-application/deploying) or code examples located [here](https://github.com/vercel/next.js/tree/canary/examples/with-docker) and [or multi env example here](https://github.com/vercel/next.js/tree/canary/examples/with-docker-multi-env). Self-hosting allows you to handle long-running tasks effectively.
+
+### Hosting Platforms for Next.js Applications
+
+- [Vercel](https://vercel.com)
+- [Netlify](https://www.netlify.com)
+- [AWS(with `open-next`)](https://opennext.js.org/)
+- [Cloudflare Pages via `@cloudflare/next-on-pages`](https://developers.cloudflare.com/pages/framework-guides/nextjs/ssr/)
+- [Render](https://render.com)
+- [Railway](https://railway.app)
+- [Fly.io](https://fly.io)
+
+Select a platform that aligns with your application's requirements and scalability goals.
