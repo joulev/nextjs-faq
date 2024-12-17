@@ -29,6 +29,52 @@ However, if you use it in a layout component, the pathname cannot be reliably de
 
 all server components inside `layout.tsx` can only get the pathname until `/users/[userId]`. It canot read `appId`. You need to keep this in mind.
 
-If you need to show certain elements on certain routes and not on other routes, or display certain element in different styling depending on the pathname, you need to use route groups or client components. In the above example, you can't ask `layout.tsx` to display a banner for a particular `appId`, if the layout is a server component.
-
 See also: [vercel/next.js#43704](https://github.com/vercel/next.js/issues/43704).
+
+
+
+In order for you to reliably get the pathname of the segments in server components, you either have to leverage the parallel routes feature or resort to client components. Parallel routes allows you to create a slot in your layout.tsx in which you use a catch-all route to access child segments of your layout.tsx. The setup goes as follow:
+
+<Files>
+  <Folder name="app" defaultOpen>
+    <Folder name="users" defaultOpen>
+      <Folder name="[userId]" defaultOpen>
+        <File name="layout.tsx" />
+        <Folder name="[appId]" defaultOpen>
+          <File name="page.tsx" />
+        </Folder>
+        <Folder name="@breadcrumb" defaultOpen>
+          <File name="page.tsx" />
+          <Folder name="[...slug]" defaultOpen>
+            <File name="page.tsx" />
+          </Folder>
+        </Folder>
+      </Folder>
+    </Folder>
+  </Folder>
+</Files>
+
+And in `/app/users/[userId]/layout.tsx` you can create a `breadcrumb: ReactNode` prop in addition to `children` and "slot" it inside the return function just as you do with the `chidlren` node:
+
+```tsx
+export default async function UserAppLayout({
+  children,
+  breadcrumb,
+}: Readonly<{
+  children: React.ReactNode;
+  breadcrumb: React.ReactNode;
+}>) {
+  return (
+    <>
+      <nav>
+        {breadcrumb}
+      </nav>
+      <div>
+        {children}
+      </div>
+    </>
+  )
+}
+```
+
+See the demo here: [alfonsusac/nextjs-server-pathname](https://github.com/alfonsusac/nextjs-server-pathname)
