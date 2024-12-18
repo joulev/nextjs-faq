@@ -25,6 +25,11 @@ const config = {
         "https://nextjs.org/docs/getting-started/react-essentials#the-use-client-directive",
       permanent: true,
     },
+    {
+      source: "/get-pathname-in-rsc",
+      destination: "https://github.com/vercel/next.js/issues/43704#issuecomment-2090798307",
+      permanent: true,
+    },
     // Redirect old slugs to new shortened slugs
     {
       source: "/fetching-own-api-endpoint-in-getserversideprops-and-similar-functions",
